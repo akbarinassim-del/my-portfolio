@@ -16,7 +16,7 @@ export function MobileNavigation({ label, items, navigationLabel }: {
         menu.current.querySelector("summary")?.focus();
       }
     }}>
-      <summary>{label}<span aria-hidden="true">+</span></summary>
+      <summary><span className="sr-only">{label}</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 8h16M4 16h16" /></svg></summary>
       <nav aria-label={navigationLabel}>
         {items.map(([id, text]) => (
           <a key={id} href={`#${id}`} onClick={() => {
