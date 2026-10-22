@@ -1,6 +1,6 @@
 # Nasim Akbari — Personal Portfolio
 
-A bilingual portfolio for **Nasim Akbari | Product Designer & AI-Powered Web Creator**, built with Next.js App Router, TypeScript, and Tailwind CSS. The existing charcoal theme, lime accents, self-hosted typography, and responsive visual identity are preserved.
+A bilingual portfolio for **Nasim Akbari | Product Designer & AI-Powered Web Creator**, built with Next.js App Router, TypeScript, and Tailwind CSS. The charcoal theme and self-hosted typography are retained in an original minimalist redesign with restrained lime accents, larger typography, oversized project covers, and direct contact access from the first screen.
 
 ## Development
 
@@ -25,7 +25,7 @@ The build generates the route types needed by the TypeScript check. ESLint uses 
 
 ## Site content
 
-The page follows this order: Hero, Services, Selected Work, Work Experience, Education & Certification, Design Process, About Me, Professional Recommendation, Contact, Footer.
+The page follows this order: sticky navigation with direct email CTA, Hero with portrait and contact actions, Selected Work, Services, About Me, Work Experience, Education & Certification, Professional Recommendation, Contact, Footer. The existing design-process content is preserved in an accessible expandable panel under Services.
 
 - `src/config/site.ts`: verified identity, contact details, project links, portrait dimensions, CV path, XGen links, and the supplied production URL.
 - `src/content/en.ts` and `src/content/fa.ts`: matching typed translations, project-specific design contributions, work and education dates, and the supplied recommendation in its original Persian and English translation.
@@ -60,3 +60,16 @@ Manrope and Vazirmatn are self-hosted with `next/font/local`. Their SIL Open Fon
 The supplied Behance, XGen, LinkedIn, and live-site URLs are used exactly as provided. This cloud environment’s outbound proxy returned HTTP 403 for these destinations, so their remote availability could not be verified here. The recommender portrait URL was also blocked; the recommendation therefore uses the supplied text, name, title, and original-source link without a broken image or substitute portrait.
 
 Local browser checks verify the rendered link targets, safe new-tab attributes, contact protocols, bilingual layouts, image proportions, language persistence, and real CV download. Vercel project settings and deployment configuration are unchanged. Review and merge the feature branch before deploying through the existing workflow.
+
+## Redesign review
+
+This update follows the design principles supplied in the brief: generous balanced whitespace, large confident typography, full-width project imagery, quiet surfaces, subtle hover effects, and direct client contact actions. The requested Proxio reference and Framer marketplace pages were blocked by the cloud proxy (HTTP 403), so their actual visual structure and responsive behavior could not be inspected. No Framer source code, branded assets, or artwork is used.
+
+- The sticky “Let's Talk” email CTA is visible on desktop and mobile.
+- Hero actions use the verified email, Selected Work anchor, and real CV PDF. The truncated mailto in the brief was resolved to the explicitly supplied `akbari.nassim@gmail.com` address.
+- Email, LinkedIn, and international phone links are displayed beside the hero actions. Contact links also remain in the Contact section.
+- Every project cover is full width at its original aspect ratio, with a visible Behance case-study link and unchanged descriptions, contributions, and team credits.
+- Layout animation and hover transitions are subtle; reduced-motion preferences disable them. Content remains available without JavaScript.
+- No dependencies, public assets, professional facts, Vercel settings, or deployment configuration were changed.
+
+Local Chromium checks covered both languages at 1440, 1024, 768, 390, and 320 pixels, including first-screen contact visibility, section order, navigation, language refresh persistence, all local images, safe external-link attributes, and actual PDF downloads. Automated WCAG A/AA scans reported no violations at those combinations. External destination availability remains unverified because of the proxy restriction; in particular, the existing LinkedIn URL is preserved exactly as supplied.
