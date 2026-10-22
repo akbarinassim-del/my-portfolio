@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ContactMenu } from "./contact-menu";
 import { MobileNavigation } from "./mobile-navigation";
 import { projects, site } from "@/config/site";
 import type { Dictionary } from "@/content/en";
@@ -41,7 +42,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <span aria-hidden="true">/</span>
               <Link href="/fa" hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} aria-label="فارسی">FA</Link>
             </nav>
-            <a className="nav-contact" href={`mailto:${site.contact.email}`}>{t.talk}<Arrow diagonal /></a>
+            <ContactMenu label={t.talk} labels={t.contactMenu} className="nav-contact" />
             <MobileNavigation label={t.menu} items={navigation} navigationLabel={locale === "en" ? "Mobile navigation" : "پیمایش موبایل"} />
           </div>
         </div>
@@ -51,13 +52,13 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <div className="hero-copy">
             <div className="hero-identity">
               <p className="eyebrow hero-eyebrow">{t.hero.eyebrow}</p>
-              <p className="hero-name">{t.name}<span className="accent">.</span></p>
-              <p className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</p>
+              <h1 id="hero-title" className="hero-name">{t.name}</h1>
+              <h2 className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</h2>
             </div>
-            <h1 id="hero-title">{t.hero.headline}<br />{" "}<span>{t.hero.highlight}</span></h1>
+            <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
             <p className="hero-description">{t.hero.description}</p>
             <div className="hero-actions">
-              <a className="button button-primary" href={`mailto:${site.contact.email}`}>{t.hero.contact}<Arrow diagonal /></a>
+              <ContactMenu label={t.talk} labels={t.contactMenu} className="button button-primary" />
               <a className="button button-secondary" href="#work">{t.hero.explore}<Arrow /></a>
               <a className="button button-cv" href={site.cv} download="Nasim-Akbari-CV.pdf">{t.download}<span aria-hidden="true">↓</span></a>
             </div>
@@ -177,12 +178,8 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <p className="eyebrow"><span aria-hidden="true">07</span>{t.contact.label}</p>
           <h2 id="contact-title">{t.contact.title}</h2>
           <p className="contact-description">{t.contact.description}</p>
-          <a className="contact-email" href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi><Arrow diagonal /></a>
-          <address className="contact-details">
-            <div><span>{t.contact.emailLabel}</span><a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a></div>
-            <div><span>{t.contact.phoneLabel}</span><a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a></div>
-            <a className="contact-social" href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.contact.linkedin}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
-          </address>
+          <ContactMenu label={t.talk} labels={t.contactMenu} className="button button-primary" />
+          <noscript><p className="contact-fallback"><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> · <a href={site.contact.phoneHref}>{site.contact.phone}</a> · <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}</a></p></noscript>
         </section>
 
 
