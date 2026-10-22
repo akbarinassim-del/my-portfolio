@@ -23,6 +23,14 @@ function SectionHeading({ number, label, title, intro, id }: { number: string; l
   );
 }
 
+function ServiceIcon({ index }: { index: number }) {
+  return (
+    <svg aria-hidden="true" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      {index === 0 ? <path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" /> : index === 1 ? <><rect x="3" y="3" width="18" height="18" rx="3" /><path d="M3 9h18M9 9v12" /></> : <><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M3 9h18m-13 4-2 2 2 2m8-4 2 2-2 2" /></>}
+    </svg>
+  );
+}
+
 export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dictionary }) {
   const navigationIds = ["work", "services", "about", "experience", "education", "recommendation", "contact"] as const;
   const navigation: [string, string][] = navigationIds.map(id => [id, t.navigation[id]]);
@@ -58,9 +66,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
             <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
             <p className="hero-description">{t.hero.description}</p>
             <div className="hero-actions">
-              <ContactMenu label={t.talk} labels={t.contactMenu} className="button button-primary" />
               <a className="button button-secondary" href="#work">{t.hero.explore}<Arrow /></a>
-              <a className="button button-cv" href={site.cv} download="Nasim-Akbari-CV.pdf">{t.download}<span aria-hidden="true">↓</span></a>
             </div>
             <address className="hero-contact-links">
               <a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a>
@@ -81,7 +87,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <div className="projects-grid">{projects.map((project, index) => {
             const content = t.work.projects[project.id];
             return (
-              <article className="project-card" key={project.id}>
+              <article className={`project-card${index === 0 ? " project-featured" : ""}`} key={project.id}>
                 <div className="project-top">
                   <div>
                     <p className="project-kind"><span aria-hidden="true">0{index + 1}</span>{t.work.team}</p>
@@ -91,7 +97,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
                   <a className="case-link" href={project.href} target="_blank" rel="noopener noreferrer">{t.work.view}<Arrow diagonal /><span className="sr-only"> — {project.name}, {t.work.newTab}</span></a>
                 </div>
                 <a className="project-image-link" href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.work.view} (${t.work.newTab})`}>
-                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes="(max-width: 760px) 92vw, (max-width: 1400px) 90vw, 1200px" className="project-image" />
+                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1400px) 90vw, 1200px" : "(max-width: 760px) 92vw, (max-width: 1400px) 44vw, 580px"} className="project-image" />
                 </a>
                 <div className="project-bottom">
                   <p className="project-description">{content.description}</p>
@@ -106,7 +112,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <SectionHeading id="services-title" number="02" label={t.services.label} title={t.services.title} intro={t.services.intro} />
           <div className="services-grid">{t.services.items.map((service, index) => (
             <article className="service-card" key={service.title}>
-              <span className="card-index" aria-hidden="true">0{index + 1}</span>
+              <div className="service-card-top"><span className="service-icon"><ServiceIcon index={index} /></span><span className="card-index" aria-hidden="true">0{index + 1}</span></div>
               <h3>{service.title}</h3><p>{service.description}</p><div className="service-details">{service.details}</div>
             </article>
           ))}</div>
@@ -135,8 +141,8 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <li className="timeline-entry" key={job.company}>
                 <p className="timeline-date">{job.date}</p>
                 <div className="timeline-content">
-                  <p className="timeline-role">{job.role}</p>
                   <h3>{job.company}</h3>
+                  <p className="timeline-role">{job.role}</p>
                   <p className="timeline-description">{job.description}</p>
                 </div>
               </li>
@@ -149,8 +155,8 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <div className="credentials-grid">
             <article className="credential-card">
               <p className="eyebrow">{t.education.degreeLabel}</p>
-              <h3>{t.education.degree}</h3>
-              <p className="credential-institution">{t.education.university}</p>
+              <h3>{t.education.university}</h3>
+              <p className="credential-institution">{t.education.degree}</p>
               <p className="timeline-date">{t.education.date}</p>
             </article>
             <article className="credential-card">
@@ -165,10 +171,9 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
         <section id="recommendation" className="section shell" aria-labelledby="recommendation-title">
           <SectionHeading id="recommendation-title" number="06" label={t.recommendation.label} title={t.recommendation.title} />
           <figure className="recommendation-card">
-            <span className="quote-mark" aria-hidden="true">“</span>
             <blockquote><p>{t.recommendation.quote}</p></blockquote>
             <figcaption>
-              <div><p className="recommender-name">{t.recommendation.name}</p><p className="recommender-role">{t.recommendation.role}</p></div>
+              <div><p className="recommendation-affiliation" lang="en">XGen</p><p className="recommender-name">{t.recommendation.name}</p><p className="recommender-role">{t.recommendation.role}</p></div>
               <a className="case-link" href={site.profile} target="_blank" rel="noopener noreferrer">{t.recommendation.source}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
             </figcaption>
           </figure>
@@ -178,8 +183,11 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <p className="eyebrow"><span aria-hidden="true">07</span>{t.contact.label}</p>
           <h2 id="contact-title">{t.contact.title}</h2>
           <p className="contact-description">{t.contact.description}</p>
-          <ContactMenu label={t.talk} labels={t.contactMenu} className="button button-primary" />
-          <noscript><p className="contact-fallback"><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> · <a href={site.contact.phoneHref}>{site.contact.phone}</a> · <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}</a></p></noscript>
+          <address className="contact-details">
+            <div><span>{t.contact.emailLabel}</span><a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a></div>
+            <div><span>{t.contact.phoneLabel}</span><a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a></div>
+            <div><span>{t.linkedinLabel}</span><a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.contact.linkedin}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a></div>
+          </address>
         </section>
 
 
