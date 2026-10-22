@@ -12,11 +12,19 @@ export const en = {
   },
   "talk": "Let's Talk",
   "linkedinLabel": "LinkedIn",
+  "contactMenu": {
+    "title": "Get in touch",
+    "close": "Close contact options",
+    "email": "Email",
+    "phone": "Phone",
+    "linkedin": "LinkedIn",
+    "newTab": "Opens in a new tab"
+  },
   "menu": "Menu",
   "language": "Choose language",
   "home": "Nasim Akbari — home",
   "hero": {
-    "eyebrow": "Thoughtful design. Real possibilities.",
+    "eyebrow": "Hello, I'm",
     "headline": "I design digital experiences",
     "highlight": "that come to life.",
     "description": "I design intuitive, user-centered digital products and bring ideas to life through thoughtful design and AI-powered web creation.",
@@ -141,8 +149,8 @@ export const en = {
   },
   "contact": {
     "label": "Let's work together",
-    "title": "Your next idea starts with a conversation.",
-    "description": "Have a product to shape, an experience to rethink, or a website to bring to life? Let’s explore what it could become.",
+    "title": "Have a project in mind? Let's make it happen.",
+    "description": "I'd love to hear about your idea.",
     "email": "Let's Work Together",
     "emailLabel": "Email",
     "phoneLabel": "Phone",

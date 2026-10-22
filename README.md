@@ -25,7 +25,7 @@ The build generates the route types needed by the TypeScript check. ESLint uses 
 
 ## Site content
 
-The page follows this order: sticky navigation with direct email CTA, Hero with portrait and contact actions, Selected Work, Services, About Me, Work Experience, Education & Certification, Professional Recommendation, Contact, Footer. The existing design-process content is preserved in an accessible expandable panel under Services.
+The page follows this order: sticky navigation with a shared contact menu, Hero with portrait and contact actions, Selected Work, Services, About Me, Work Experience, Education & Certification, Professional Recommendation, Contact, Footer. The existing design-process content is preserved in an accessible expandable panel under Services.
 
 - `src/config/site.ts`: verified identity, contact details, project links, portrait dimensions, CV path, XGen links, and the supplied production URL.
 - `src/content/en.ts` and `src/content/fa.ts`: matching typed translations, project-specific design contributions, work and education dates, and the supplied recommendation in its original Persian and English translation.
@@ -65,11 +65,21 @@ Local browser checks verify the rendered link targets, safe new-tab attributes, 
 
 This update follows the design principles supplied in the brief: generous balanced whitespace, large confident typography, full-width project imagery, quiet surfaces, subtle hover effects, and direct client contact actions. The requested Proxio reference and Framer marketplace pages were blocked by the cloud proxy (HTTP 403), so their actual visual structure and responsive behavior could not be inspected. No Framer source code, branded assets, or artwork is used.
 
-- The sticky “Let's Talk” email CTA is visible on desktop and mobile.
-- Hero actions use the verified email, Selected Work anchor, and real CV PDF. The truncated mailto in the brief was resolved to the explicitly supplied `akbari.nassim@gmail.com` address.
+- The sticky “Let's Talk” button is visible on desktop and mobile and opens contact options instead of launching an email client.
+- Hero actions use the shared contact menu, Selected Work anchor, and real CV PDF. The truncated mailto in the brief was resolved to the explicitly supplied `akbari.nassim@gmail.com` address.
 - Email, LinkedIn, and international phone links are displayed beside the hero actions. Contact links also remain in the Contact section.
 - Every project cover is full width at its original aspect ratio, with a visible Behance case-study link and unchanged descriptions, contributions, and team credits.
 - Layout animation and hover transitions are subtle; reduced-motion preferences disable them. Content remains available without JavaScript.
 - No dependencies, public assets, professional facts, Vercel settings, or deployment configuration were changed.
 
 Local Chromium checks covered both languages at 1440, 1024, 768, 390, and 320 pixels, including first-screen contact visibility, section order, navigation, language refresh persistence, all local images, safe external-link attributes, and actual PDF downloads. Automated WCAG A/AA scans reported no violations at those combinations. External destination availability remains unverified because of the proxy restriction; in particular, the existing LinkedIn URL is preserved exactly as supplied.
+
+## Hero and contact refinement
+
+The hero hierarchy now reads: small greeting, prominent name as the sole main heading, clearly visible unchanged professional title as a secondary heading, then the smaller supporting tagline. The portrait and all other sections retain their existing design.
+
+`src/components/contact-menu.tsx` supplies the same interaction for the Header, Hero, and bottom Contact section. A real button exposes `aria-haspopup`, `aria-controls`, and expanded state. A native modal dialog anchors near its trigger on desktop and becomes a bottom sheet on narrow screens. It focuses Email on opening, cycles Tab/Shift+Tab within its controls, closes on Escape, outside click, or its close button, locks background scrolling, and restores focus to the originating trigger. Email/phone/LinkedIn only activate their respective destinations when selected. The bottom Contact section no longer displays an oversized email headline.
+
+All contact-menu labels and the revised greeting and contact invitation are translated into Persian. Logical layout and isolated email/phone text support RTL. The dialog transitions respect reduced-motion preferences. Direct hero contact links and a Contact-section noscript fallback remain available if JavaScript is disabled. No package or Vercel configuration change is required.
+
+Validation for this refinement includes all three menu locations in both languages at 1440, 1024, 768, 390, and 320 pixels; typography hierarchy; panel bounds; keyboard focus and dismissal; touch interaction; language switching/refresh; exact destination URLs; and automated accessibility scans. LinkedIn new-tab behavior was tested with a mocked response; this does not establish remote profile availability.
