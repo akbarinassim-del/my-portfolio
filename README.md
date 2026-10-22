@@ -1,8 +1,8 @@
-# Nasim Akbari — Portfolio
+# Nasim Akbari — Personal Portfolio
 
-A bilingual portfolio for **Nasim Akbari — Product Designer & AI-Powered Web Creator**, built with Next.js App Router, TypeScript, and Tailwind CSS v4. The dark theme and lime accents frame the real portrait and three collaborative UX/UI projects: BeatPass, EcoGold, and Shipply.
+A bilingual portfolio for **Nasim Akbari | Product Designer & AI-Powered Web Creator**, built with Next.js App Router, TypeScript, and Tailwind CSS. The existing charcoal theme, lime accents, self-hosted typography, and responsive visual identity are preserved.
 
-## Run locally
+## Development
 
 Requires Node.js 20.9 or newer and npm.
 
@@ -11,49 +11,52 @@ npm ci
 npm run dev
 ```
 
-English is the default at `/`. Persian is at `/fa`. The EN/FA links navigate between statically rendered pages with correct HTML `lang` and `dir` attributes, so language selection and navigation also work without JavaScript. Separate route-group root layouts intentionally perform a full navigation when changing languages.
+English is the default at `/`; Persian is at `/fa`. Each page is statically rendered with the correct HTML `lang` and `dir` attributes. The language choice is represented in the URL, so refreshes, section navigation, and the home link retain the selected language. Switching languages intentionally loads the corresponding root layout. Content and language switching work without JavaScript; the small mobile navigation component adds automatic closing and Escape-key handling.
 
-## Quality checks and production
+## Quality checks
 
 ```bash
 npm run lint
 npm run build
 npm run typecheck
-npm start
 ```
 
-The build generates route types used by the TypeScript check. ESLint includes the Next.js Core Web Vitals and TypeScript rules. There is no committed automated test suite. Browser validation for this update covers both languages, mobile navigation, language switching, image loading and proportions, and project links.
+The build generates the route types needed by the TypeScript check. ESLint uses the Next.js Core Web Vitals and TypeScript rules. Serve the production build with `npm start`. No automated test runner or additional runtime dependency was added for this update.
 
-## Content and configuration
+## Site content
 
-- `src/config/site.ts`: professional identity, the verified image paths, Behance URLs, and contact configuration.
-- `src/content/en.ts` and `src/content/fa.ts`: typed English and Persian copy. Keep both dictionaries in sync.
-- `src/components/portfolio.tsx`: shared server-rendered sections and navigation.
-- `src/components/document.tsx`: document language, text direction, and local fonts.
-- `src/content/metadata.ts`: localized SEO and social metadata, with alternate-language links. No production domain or social account is invented; configure an absolute canonical URL/metadata base when a real site domain is known.
-- `src/app/globals.css`: responsive styles, logical properties for RTL, focus states, and reduced-motion support.
+The page follows this order: Hero, Services, Selected Work, Work Experience, Education & Certification, Design Process, About Me, Professional Recommendation, Contact, Footer.
 
-### Contact details
+- `src/config/site.ts`: verified identity, contact details, project links, portrait dimensions, CV path, XGen links, and the supplied production URL.
+- `src/content/en.ts` and `src/content/fa.ts`: matching typed translations, project-specific design contributions, work and education dates, and the supplied recommendation in its original Persian and English translation.
+- `src/components/portfolio.tsx`: shared server-rendered page sections.
+- `src/components/mobile-navigation.tsx`: mobile-menu behavior and keyboard handling.
+- `src/components/document.tsx`: language, direction, and local fonts.
+- `src/content/metadata.ts`: the requested page title, localized descriptions, canonical URLs, and language alternates.
+- `src/app/globals.css`: responsive layouts, RTL logical properties, focus states, and reduced-motion support.
 
-The email in `src/config/site.ts` is intentionally empty. Add a verified email address to enable the contact email link. While empty, the page displays a localized “contact details coming soon” message and a link to the case studies. No form is presented and no messages are collected. Do not add placeholder email addresses or invented social accounts to the live interface.
+All project cards explicitly acknowledge collaborative team work. Experience, education, certification, recommendation, and contact details follow the supplied brief. Email and telephone links use `mailto:` and `tel:`; there is no contact form or invented information.
 
-### Images
+## Real assets
 
-The originals in `public/images/` remain unchanged:
-
-| Image | Dimensions | Usage |
+| Asset | Dimensions / format | Usage |
 | --- | --- | --- |
-| `nasim-profile.png` | 1254 × 1254 | Portrait |
-| `beatpass.png` | 1672 × 941 | BeatPass case study |
-| `ecogold.png` | 1672 × 941 | EcoGold case study |
-| `shipply.png` | 1672 × 941 | Shipply case study |
+| `public/images/nasim-hero-dark.png` | 1086 × 1448 PNG | Main hero portrait |
+| `public/images/nasim-profile.png` | 1254 × 1254 PNG | Previous portrait, retained as backup |
+| `public/images/beatpass.png` | 1672 × 941 PNG | BeatPass cover |
+| `public/images/ecogold.png` | 1672 × 941 PNG | EcoGold cover |
+| `public/images/shipply.png` | 1672 × 941 PNG | Shipply cover |
+| `public/Nasim-Akbari-CV.pdf` | One-page PDF | Hero and About CV downloads |
+| `public/Resume-main01.pdf` | Original uploaded PDF | Retained original |
 
-Next.js Image supplies responsive, optimized delivery without modifying the source files. Images render at their natural aspect ratios, with no cropping, filters, recoloring, or text overlays. Only the hero portrait is preloaded; project images load lazily.
+The hero filename on the starting main commit (`15ddcac`) contained only a blank line. The intact edited portrait was recovered byte-for-byte from that commit’s parent at `public/images/Warm Beige Hijab Portrait with Green Halo.png`. No image generation, retouching, cropping, or recoloring was performed. The cover images and backup portrait remain unchanged. Next.js Image provides responsive delivery while rendering the images at their natural proportions.
 
-### Fonts
+The downloadable CV is a byte-for-byte copy of the actual uploaded `Resume-main01.pdf`. Both Hero and About use `/Nasim-Akbari-CV.pdf` with a download attribute. The original document content is not edited.
 
-Manrope (English) and Vazirmatn (Persian) are self-hosted from `src/assets/fonts/` through `next/font/local`. Their SIL Open Font License notices are included alongside them. Files were obtained from the official [Google Fonts repository](https://github.com/google/fonts); runtime and builds do not need Google Fonts access.
+Manrope and Vazirmatn are self-hosted with `next/font/local`. Their SIL Open Font License notices are retained in `src/assets/fonts/`; no runtime font-provider requests are needed.
 
-## Scope
+## External verification limits
 
-Project descriptions explicitly credit collaborative team work with shared research, UX, UI, user flows, wireframing, and design-system responsibilities. No fictional employers, statistics, testimonials, personal history, or measurable outcomes are included. Deployment configuration is unchanged.
+The supplied Behance, XGen, LinkedIn, and live-site URLs are used exactly as provided. This cloud environment’s outbound proxy returned HTTP 403 for these destinations, so their remote availability could not be verified here. The recommender portrait URL was also blocked; the recommendation therefore uses the supplied text, name, title, and original-source link without a broken image or substitute portrait.
+
+Local browser checks verify the rendered link targets, safe new-tab attributes, contact protocols, bilingual layouts, image proportions, language persistence, and real CV download. Vercel project settings and deployment configuration are unchanged. Review and merge the feature branch before deploying through the existing workflow.

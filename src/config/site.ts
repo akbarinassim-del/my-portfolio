@@ -1,9 +1,17 @@
-/** Add verified contact details here. Empty fields are intentionally not rendered as links. */
+/** Verified identity, assets, and contact details supplied by Nasim Akbari. */
 export const site = {
   name: "Nasim Akbari",
   professionalTitle: "Product Designer & AI-Powered Web Creator",
+  url: "https://nasim-akbari.vercel.app",
+  portrait: { src: "/images/nasim-hero-dark.png", width: 1086, height: 1448 },
+  cv: "/Nasim-Akbari-CV.pdf",
+  profile: "https://talents.xgen.design/#nasim-akbari",
+  certificate: "https://xgen.design/certificate/XGA-UIHack-2-2025-C302-8319/",
   contact: {
-    email: "",
+    email: "akbari.nassim@gmail.com",
+    phone: "+98 918 997 7130",
+    phoneHref: "tel:+989189977130",
+    linkedin: "https://www.linkedin.com/in/nasimakbari-uiux",
   },
 };
 
