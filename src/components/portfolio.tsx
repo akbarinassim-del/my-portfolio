@@ -63,9 +63,10 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <div className="hero-copy">
             <div className="hero-identity">
               <p className="eyebrow hero-eyebrow">{t.hero.eyebrow}</p>
-              <h1 id="hero-title" className="hero-name">{t.name}</h1>
+              <h1 id="hero-title" className="hero-name">{t.name.split(" ").map((part, index) => <span key={index}>{index > 0 ? " " : ""}{part}</span>)}</h1>
               <h2 className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</h2>
             </div>
+            <div className="hero-story">
             <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
             <p className="hero-description">{t.hero.description}</p>
             <div className="hero-actions">
@@ -76,9 +77,10 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
               <a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a>
             </address>
+            </div>
           </div>
           <figure className="portrait">
-            <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 760px) 106px, 340px" preload className="portrait-image" />
+            <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 600px) 110px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
             <figcaption>{t.hero.caption}</figcaption>
           </figure>
           <div className="hero-bottom"><p><span className="status-dot" aria-hidden="true" />{t.hero.audience}</p><a href="#work">{t.hero.scroll}<span aria-hidden="true">↓</span></a></div>
@@ -90,7 +92,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
           <div className="projects-grid">{projects.map((project, index) => {
             const content = t.work.projects[project.id];
             return (
-              <article className={`project-card${index === 0 ? " project-featured" : ""}`} key={project.id}>
+              <article className={`project-card project-${project.id}${index === 0 ? " project-featured" : ""}`} key={project.id}>
                 <div className="project-top">
                   <div>
                     <p className="project-kind"><span aria-hidden="true">0{index + 1}</span>{t.work.team}</p>
@@ -100,7 +102,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
                   <a className="case-link" href={project.href} target="_blank" rel="noopener noreferrer">{t.work.view}<Arrow diagonal /><span className="sr-only"> — {project.name}, {t.work.newTab}</span></a>
                 </div>
                 <a className="project-image-link" href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.work.view} (${t.work.newTab})`}>
-                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1400px) 90vw, 1200px" : "(max-width: 760px) 92vw, (max-width: 1400px) 44vw, 580px"} className="project-image" />
+                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1400px) 90vw, 1200px" : "(max-width: 900px) 92vw, (max-width: 1400px) 55vw, 720px"} className="project-image" />
                 </a>
                 <div className="project-bottom">
                   <p className="project-description">{content.description}</p>
