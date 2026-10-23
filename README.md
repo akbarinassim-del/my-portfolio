@@ -38,7 +38,7 @@ The build generates route types required by the TypeScript check. ESLint uses th
 - `src/components/portfolio.tsx`: server-rendered sections and one instance of the header contact menu.
 - `src/components/contact-menu.tsx`: existing accessible native-dialog interaction, unchanged by this refinement.
 - `src/components/mobile-navigation.tsx`: mobile-menu closing and Escape handling.
-- `src/components/section-motion.tsx`: progressive IntersectionObserver scroll reveals with reduced-motion handling and visible no-JavaScript fallback.
+- `src/components/section-motion.tsx`: one-time element-level IntersectionObserver/Web Animations reveals with grouped stagger, reduced-motion handling, and visible failure fallbacks.
 - `src/content/en.ts` / `src/content/fa.ts`: typed bilingual factual content, unchanged by this refinement.
 - `src/config/site.ts`: verified identity, contact information, real asset paths, and project/XGen links.
 - `src/content/metadata.ts`: existing SEO title, localized descriptions, canonical URLs, and language alternates; unchanged.
@@ -58,12 +58,16 @@ All three Behance URLs match the supplied case studies and use safe new-tab attr
 
 Vercel settings, deployment configuration, SEO, factual content, and existing contact-menu logic are unchanged. Review the feature branch before merging; no production deployment is initiated by these instructions.
 
-## Section rhythm and motion
+## Selective section rhythm and real scroll motion
 
-Major sections now use distinct, quiet black, charcoal, and green-tinted panel surfaces with consistent padding, subtle borders, and rounded corners. The featured BeatPass card has a stronger surface/border than the secondary EcoGold/Shipply cards; original covers remain uncropped. Project cards/images, service cards, credential cards, buttons, and links have restrained hover transitions. The existing name/title/tagline hierarchy and portrait are preserved.
+The Hero, Services, About, Experience, and Education remain open layouts rather than repeated enclosing rectangles. Selected Work has a quiet top divider and a prominent featured BeatPass card above the EcoGold/Shipply grid. Services uses three individual cards, About uses an editorial two-column layout, Experience keeps its clean timeline, Education has two subtle cards, Recommendation has one testimonial card, and Contact retains a complementary dark surface. No factual content or assets change.
 
-The new header CV download is a visible text action, not an icon-only control. On narrow screens, the header uses two compact rows so language selection, CV, contact, and mobile navigation remain accessible without clipping. The second CV download remains in About.
+The header CV download and the second download in About remain the only resume actions. There is still one unchanged header Let's Talk menu. Header responsiveness, typography hierarchy, portrait, RTL layout, and SEO settings are preserved.
 
-Scroll motion is progressive enhancement: content is visible by default. Only sections below the viewport are marked pending after IntersectionObserver initializes. Each reveals once with a short opacity/16px translate transition. Sections already visible on load remain visible, keyboard focus reveals pending content, unsupported/no-JavaScript browsers retain all content, and reduced-motion preferences disable reveals. Changing the preference to reduced motion disconnects observation and reveals everything. Print styles also force visible content.
+`SectionMotion` observes headings, project/service cards, timeline items, education cards, the testimonial, and Contact content individually. Each reveals once on entry using opacity and 16–18px translation over 560ms. Grouped project/service/timeline/education items use 0/60/120ms delays. The observer disconnects each target immediately after its first trigger; scrolling back does not replay animations.
 
-Validation includes both languages at 1440, 1024, 768, 390, and 320px; reduced-motion and ordinary-motion behavior; JavaScript-disabled visibility; surface differentiation; hover motion; sticky header actions; actual header and About PDF downloads; menu keyboard/touch behavior; image proportions; and automated WCAG A/AA scans. Factual dictionaries, public assets, metadata, contact-menu logic, and Vercel settings remain unchanged.
+There is no hidden pending CSS state. Ready elements retain their normal visible styles. Only a successfully started Web Animation temporarily applies its opening frame; completion or cancellation restores the visible baseline. Initial viewport content is skipped to avoid flashing. JavaScript-disabled, missing-observer, unsupported-animation, and thrown-animation cases keep content visible. Reduced-motion preferences skip or cancel reveals, and focusing an animated control immediately cancels its reveal. Only opacity/transform animate, so layout dimensions remain unchanged.
+
+Validation covers both languages at 1440, 1024, 768, 390, and 320px for layout, typography, action counts, links, image proportions, contact keyboard/touch behavior, CV downloads, and automated accessibility checks. Dedicated ordinary-motion tests scrolled desktop/mobile pages without hovering: each recorded 19 one-time element reveals, verified duration/distance/stagger and complete visibility afterward, and observed zero reveal-induced layout shifts. Backtracking did not replay animations. Reduced motion, live preference changes, JavaScript disabled, missing IntersectionObserver, and simulated animation failure were also tested.
+
+No new dependencies, factual content, public assets, deployment configuration, or Vercel settings changed.
