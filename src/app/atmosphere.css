@@ -1,0 +1,78 @@
+/* Bounded, translucent wisps behind content; only transforms move each cached layer.
+   Negative delays make the atmosphere established immediately, without a fade/pulse.
+   Closed keyframe paths and eased turnarounds keep the 38–58s loops continuous. */
+.hero, .work-section, .contact-section { position: relative; isolation: isolate; }
+.atmosphere {
+  position: absolute;
+  inset: -40px -32px;
+  z-index: -1;
+  overflow: clip;
+  contain: paint;
+  pointer-events: none;
+  user-select: none;
+  border-radius: inherit;
+  mask-image: linear-gradient(transparent, #000 15%, #000 78%, transparent);
+}
+.mist-layer {
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 100%;
+  max-width: 1200px;
+  height: min(58vw, 580px);
+  min-height: 320px;
+  border-radius: 47% 62% 54% 43%;
+  background:
+    radial-gradient(ellipse at 24% 52%, #a0afa164, #8a9c8a22 30%, transparent 60%),
+    radial-gradient(ellipse at 69% 62%, #8f9c954d, #7588781a 28%, transparent 58%),
+    radial-gradient(ellipse at 48% 38%, #8e9b8c33, transparent 48%);
+  filter: blur(28px);
+  opacity: .48;
+  animation: mist-drift 46s cubic-bezier(.45, 0, .55, 1) -17s infinite;
+}
+.mist-layer:nth-child(2) {
+  top: 25%;
+  left: 15%;
+  width: 82%;
+  height: min(43vw, 460px);
+  opacity: .32;
+  animation: mist-cross 58s cubic-bezier(.45, 0, .55, 1) -33s infinite;
+}
+.mist-layer:nth-child(3) {
+  top: 3%;
+  left: 30%;
+  width: 68%;
+  height: min(32vw, 360px);
+  opacity: .28;
+  animation: mist-curl 38s cubic-bezier(.45, 0, .55, 1) -9s infinite;
+}
+.atmosphere--work { inset-block: 0; opacity: .28; }
+.atmosphere--work .mist-layer { top: 2%; }
+.atmosphere--contact { inset: 0; opacity: .9; mask-image: linear-gradient(transparent, #000 25%, #000 85%, transparent); }
+.atmosphere--contact .mist-layer { top: -25%; }
+.atmosphere--contact .mist-layer:nth-child(2) { top: 0; }
+@keyframes mist-drift {
+  0%, 100% { transform: translate3d(-9%, 2%, 0) rotate(-6deg) scaleY(.72); }
+  50% { transform: translate3d(13%, -5%, 0) rotate(4deg) scaleY(.92); }
+}
+@keyframes mist-cross {
+  0%, 100% { transform: translate3d(12%, -7%, 0) rotate(7deg) scaleY(.8); }
+  50% { transform: translate3d(-15%, 9%, 0) rotate(-5deg) scaleY(1.06); }
+}
+@keyframes mist-curl {
+  0%, 100% { transform: translate3d(-10%, -3%, 0) rotate(-8deg) scale(.94, .72); }
+  50% { transform: translate3d(9%, 12%, 0) rotate(6deg) scale(1.08, 1); }
+}
+@media (max-width: 900px) {
+  .atmosphere { inset-inline: -18px; }
+  .atmosphere--contact { inset-inline: 0; }
+}
+@media (max-width: 600px) {
+  .mist-layer { width: 140%; left: -25%; min-height: 360px; filter: blur(22px); }
+  .mist-layer:nth-child(2) { width: 120%; left: -5%; }
+  .mist-layer:nth-child(3) { width: 100%; left: 8%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mist-layer { animation: none; }
+  .atmosphere { opacity: .2; }
+}

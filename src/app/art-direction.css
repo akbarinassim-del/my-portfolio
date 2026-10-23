@@ -1,14 +1,24 @@
 /* Composition layer: original editorial layouts over the shared accessible UI system. */
-:root { --art-rule: #49513e; --art-quiet: #aeb7a0; }
-.shell { width: min(1240px, calc(100% - 96px)); }
+:root { --art-rule: #49513e; --art-quiet: #aeb7a0; --reading-width: 680px; }
+.shell { width: min(1360px, calc(100% - clamp(64px, 6.67vw, 128px))); }
 .section { margin-top: 104px; }
 .section-heading { margin-bottom: 36px; }
 .section-heading h2 { font-size: clamp(34px, 3.7vw, 50px); line-height: 1.2; letter-spacing: -2px; }
-.section-intro { max-width: 530px; }
+.section-intro { max-width: 640px; }
 .eyebrow { letter-spacing: 1.5px; }
 .header-inner { height: 88px; }
 .desktop-nav { gap: 24px; }
 .header-actions { gap: 14px; }
+
+/* Wider image-led compositions, with bounded and comfortably spaced reading columns. */
+.hero-description, .section-intro, .project-description, .service-card>p,
+.process-grid p, .about-copy, .timeline-description, .credential-institution,
+.contact-description { line-height: 1.7; }
+.project-description, .timeline-description, .contact-description { max-width: var(--reading-width); }
+html[lang="fa"] .hero-description, html[lang="fa"] .section-intro,
+html[lang="fa"] .project-description, html[lang="fa"] .service-card>p,
+html[lang="fa"] .about-copy, html[lang="fa"] .timeline-description,
+html[lang="fa"] .credential-institution, html[lang="fa"] .contact-description { line-height: 1.85; }
 
 /* Identity is a typographic composition, with the portrait offset rather than boxed. */
 .hero { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); column-gap: 20px; row-gap: 32px; padding-top: 56px; align-items: start; }
@@ -21,13 +31,13 @@
 .hero .professional-title { font-size: clamp(23px, 2.1vw, 29px); line-height: 1.4; font-weight: 450; margin: 30px 0 0; max-width: 650px; }
 .hero-story { grid-column: 3 / 9; grid-row: 2; min-width: 0; animation: editorial-enter .85s ease-out both; }
 .hero-tagline { font-size: 22px; letter-spacing: -.5px; line-height: 1.6; margin: 0; color: #d9e3cd; }
-.hero-description { margin-top: 18px; line-height: 1.9; }
+.hero-description { margin-top: 18px; max-width: var(--reading-width); }
 .hero-actions { margin-top: 25px; }
 .hero-contact-links { gap: 6px 20px; margin-top: 22px; }
 .hero .portrait { grid-column: 9 / -1; grid-row: 1 / 3; justify-self: end; align-self: start; width: 100%; max-width: 380px; margin-top: 78px; animation: editorial-enter 1s ease-out both; }
 .portrait-image { border-radius: 4px 64px 4px 4px; border: 0; box-shadow: none; }
 [dir="rtl"] .portrait-image { border-radius: 64px 4px 4px 4px; }
-.portrait figcaption { border-inline-start: 1px solid #6f805e; padding-inline-start: 14px; margin-top: 20px; padding-top: 0; font-size: 13px; max-width: 280px; }
+.portrait figcaption { border-inline-start: 1px solid #6f805e; padding-inline-start: 14px; margin-top: 20px; padding-top: 0; font-size: 14px; max-width: 280px; }
 .hero-bottom { grid-column: 1 / -1; grid-row: 3; margin-top: 10px; padding-block: 24px; border-top: 0; }
 @keyframes editorial-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
@@ -48,7 +58,7 @@
 .project-kind>span { display: inline-block; color: #acbb9c; font-size: 28px; line-height: 1; letter-spacing: -1px; margin-inline-end: 8px; }
 .project-category { margin-top: 12px; }
 .project-image-link { border: 1px solid #4a5340; border-radius: 6px; overflow: visible; }
-.project-image { border-radius: 5px; }
+.project-image { border-radius: 5px; aspect-ratio: 1672 / 941; }
 .project-image-link:hover { transform: translateY(-4px); box-shadow: 0 14px 35px #0004; }
 .project-bottom { grid-template-columns: 1.2fr 1fr; gap: 45px; padding-top: 25px; }
 .project-featured .project-bottom { padding-inline-start: 8.33%; }
@@ -77,7 +87,7 @@
 .service-icon { display: none; }
 .service-card-top .card-index { font-size: 35px; color: #9dac8d; letter-spacing: -1px; }
 .services-grid .service-card h3 { grid-column: 2; grid-row: 1 / 3; font-size: 30px; line-height: 1.3; max-width: 350px; }
-.service-card>p { grid-column: 3; grid-row: 1; margin: 0; line-height: 1.9; }
+.service-card>p { grid-column: 3; grid-row: 1; margin: 0; line-height: 1.7; }
 .service-details { grid-column: 3; grid-row: 2; margin-top: 20px; padding-top: 0; border: 0; line-height: 1.8; color: #a9b99a; }
 .process-details { margin-top: 8px; }
 
@@ -87,7 +97,7 @@
 .about-section .section-heading h2 { font-size: 35px; }
 .about-grid { display: contents; }
 .about-lead { grid-column: 6 / -1; grid-row: 1; font-size: 32px; line-height: 1.6; letter-spacing: -.8px; }
-.about-copy { grid-column: 6 / -1; grid-row: 2; max-width: 660px; }
+.about-copy { grid-column: 6 / -1; grid-row: 2; max-width: var(--reading-width); }
 .about-actions { grid-column: 6 / -1; grid-row: 3; margin-top: 0; }
 .principles { grid-column: 1 / -1; grid-row: 4; margin-top: 8px; border-bottom: 0; padding-bottom: 0; }
 #experience { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 36px; }
@@ -187,7 +197,7 @@ html[lang="fa"] .recommendation-card blockquote p { font-size: 27px; line-height
   .portrait figcaption { display: block; font-size: 12px; line-height: 1.8; margin-top: 14px; padding-inline-start: 10px; }
   .hero-actions { margin-top: 22px; }
   .hero-contact-links { row-gap: 10px; }
-  .hero-contact-links a { font-size: 13px; overflow-wrap: anywhere; }
+  .hero-contact-links a { font-size: var(--text-secondary); overflow-wrap: anywhere; }
   .hero-bottom { grid-row: 3; margin-top: 0; }
   .section { margin-top: 72px; }
   .section-heading h2 { font-size: 35px; line-height: 1.3; letter-spacing: -1.3px; }
@@ -232,7 +242,7 @@ html[lang="fa"] .recommendation-card blockquote p { font-size: 27px; line-height
   .hero .hero-name { font-size: 74px; }
   .hero .professional-title { font-size: 20px; }
   .hero-tagline { font-size: 19px; }
-  .hero-contact-links a { font-size: 12px; }
+  .hero-contact-links a { font-size: var(--text-secondary); }
   .section-heading h2 { font-size: 32px; }
   #contact { padding-inline: 20px; }
 }

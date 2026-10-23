@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Atmosphere } from "./atmosphere";
 import { ContactMenu } from "./contact-menu";
 import { SectionMotion } from "./section-motion";
 import { MobileNavigation } from "./mobile-navigation";
@@ -41,7 +42,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
       <a className="skip-link" href="#main">{t.skip}</a>
       <header className="site-header">
         <div className="shell header-inner">
-          <Link className="wordmark" href={locale === "en" ? "/" : "/fa"} aria-label={t.home}><span lang="en" dir="ltr">nasim<span className="accent">.</span></span></Link>
+          <Link className="wordmark" href={locale === "en" ? "/" : "/fa"} aria-label={t.home}><span lang="en" dir="ltr">nasim</span></Link>
           <nav className="desktop-nav" aria-label={locale === "en" ? "Main navigation" : "پیمایش اصلی"}>
             {desktopNavigation.map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
           </nav>
@@ -60,6 +61,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
       <main id="main">
         <SectionMotion />
         <section className="hero shell" aria-labelledby="hero-title">
+          <Atmosphere variant="hero" />
           <div className="hero-copy">
             <div className="hero-identity">
               <p className="eyebrow hero-eyebrow">{t.hero.eyebrow}</p>
@@ -83,10 +85,11 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
             <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 600px) 110px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
             <figcaption>{t.hero.caption}</figcaption>
           </figure>
-          <div className="hero-bottom"><p><span className="status-dot" aria-hidden="true" />{t.hero.audience}</p><a href="#work">{t.hero.scroll}<span aria-hidden="true">↓</span></a></div>
+          <div className="hero-bottom"><p>{t.hero.audience}</p><a href="#work">{t.hero.scroll}<span aria-hidden="true">↓</span></a></div>
         </section>
 
         <section id="work" className="section shell work-section" aria-labelledby="work-title">
+          <Atmosphere variant="work" />
           <SectionHeading id="work-title" number="01" label={t.work.label} title={t.work.title} intro={t.work.intro} />
           <p className="collaboration-note">{t.work.shared}</p>
           <div className="projects-grid">{projects.map((project, index) => {
@@ -96,13 +99,13 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
                 <div className="project-top">
                   <div>
                     <p className="project-kind"><span aria-hidden="true">0{index + 1}</span>{t.work.team}</p>
-                    <h3><bdi lang="en">{project.name}</bdi><span className="project-subtitle"> — {content.title}</span></h3>
+                    <h3><bdi lang="en">{project.name}</bdi><span className="project-subtitle">{content.title}</span></h3>
                     <p className="project-category">{content.category}</p>
                   </div>
                   <a className="case-link" href={project.href} target="_blank" rel="noopener noreferrer">{t.work.view}<Arrow diagonal /><span className="sr-only"> — {project.name}, {t.work.newTab}</span></a>
                 </div>
                 <a className="project-image-link" href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.work.view} (${t.work.newTab})`}>
-                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1400px) 90vw, 1200px" : "(max-width: 900px) 92vw, (max-width: 1400px) 55vw, 720px"} className="project-image" />
+                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1456px) 94vw, 1360px" : "(max-width: 900px) 92vw, (max-width: 1400px) 55vw, 720px"} className="project-image" />
                 </a>
                 <div className="project-bottom">
                   <p className="project-description">{content.description}</p>
@@ -136,7 +139,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
             <a className="button button-secondary" href={site.cv} download="Nasim-Akbari-CV.pdf">{t.download}<span aria-hidden="true">↓</span></a>
             <a className="text-link" href={site.profile} target="_blank" rel="noopener noreferrer">{t.about.profile}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
           </div>
-          <ul className="principles">{t.about.principles.map(principle => <li key={principle}><span className="principle-dot" aria-hidden="true" />{principle}</li>)}</ul>
+          <ul className="principles">{t.about.principles.map(principle => <li key={principle}>{principle}</li>)}</ul>
         </section>
 
         <section id="experience" className="section shell" aria-labelledby="experience-title">
@@ -185,6 +188,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
         </section>
 
         <section id="contact" className="contact-section shell" aria-labelledby="contact-title">
+          <Atmosphere variant="contact" />
           <p className="eyebrow"><span aria-hidden="true">07</span>{t.contact.label}</p>
           <h2 id="contact-title">{t.contact.title}</h2>
           <p className="contact-description">{t.contact.description}</p>
@@ -197,7 +201,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
 
 
       </main>
-      <footer className="shell footer"><div><span className="footer-name">{t.name}<span className="accent">.</span></span><p>{t.footer}</p></div><p className="copyright">© {new Date().getFullYear()} <bdi>{site.name}</bdi></p><a href="#main">{t.top}<span aria-hidden="true">↑</span></a></footer>
+      <footer className="shell footer"><div><span className="footer-name">{t.name}</span><p>{t.footer}</p></div><p className="copyright">© {new Date().getFullYear()} <bdi>{site.name}</bdi></p><a href="#main">{t.top}<span aria-hidden="true">↑</span></a></footer>
     </>
   );
 }
