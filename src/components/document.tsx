@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "@/app/globals.css";
+import "@/app/art-direction.css";
 
 const manrope = localFont({
   src: "../assets/fonts/Manrope.ttf",

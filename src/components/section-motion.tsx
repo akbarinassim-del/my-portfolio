@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 const targets = [
   ".section-heading",
+  ".about-lead",
+  ".about-copy",
   ".project-card",
   ".service-card",
   ".timeline-entry",
@@ -25,7 +27,7 @@ export function SectionMotion() {
     const delays = new Map<HTMLElement, number>();
     document.querySelectorAll(".projects-grid, .services-grid, .timeline, .credentials-grid").forEach(group => {
       Array.from(group.children).forEach((element, index) => {
-        delays.set(element as HTMLElement, Math.min(index, 2) * 60);
+        delays.set(element as HTMLElement, Math.min(index, 2) * 50);
       });
     });
 
@@ -46,12 +48,30 @@ export function SectionMotion() {
           return;
         }
         try {
-          const distance = element.matches(".section-heading") ? 16 : 18;
+          const direction = document.documentElement.dir === "rtl" ? 1 : -1;
+          let from: Keyframe = { opacity: 0, transform: "translateY(14px)" };
+          let duration = 560;
+          if (element.matches(".section-heading, .about-copy")) {
+            from = { opacity: 0, transform: `translateX(${direction * 14}px)` };
+            duration = 500;
+          } else if (element.matches(".project-card")) {
+            from = { opacity: 0, transform: "translateY(20px) scale(.985)" };
+            duration = 600;
+          } else if (element.matches(".service-card, .timeline-entry")) {
+            from = { opacity: 0, transform: `translateX(${direction * 18}px)` };
+            duration = 540;
+          } else if (element.matches(".recommendation-card")) {
+            from = { opacity: 0 };
+            duration = 650;
+          } else if (element.matches("#contact > h2")) {
+            from = { opacity: 0, transform: "translateY(12px)" };
+            duration = 620;
+          }
           const animation = element.animate([
-            { opacity: 0, transform: `translateY(${distance}px)` },
-            { opacity: 1, transform: "translateY(0)" },
+            from,
+            { opacity: 1, transform: "none" },
           ], {
-            duration: 560,
+            duration,
             delay: delays.get(element) ?? 0,
             easing: "cubic-bezier(.2, .65, .3, 1)",
             fill: "backwards",
