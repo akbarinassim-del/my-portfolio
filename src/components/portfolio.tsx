@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ContactMenu } from "./contact-menu";
+import { SectionMotion } from "./section-motion";
 import { MobileNavigation } from "./mobile-navigation";
 import { projects, site } from "@/config/site";
 import type { Dictionary } from "@/content/en";
@@ -50,12 +51,14 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <span aria-hidden="true">/</span>
               <Link href="/fa" hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} aria-label="فارسی">FA</Link>
             </nav>
+            <a className="header-cv" href={site.cv} download="Nasim-Akbari-CV.pdf">{t.download}<span aria-hidden="true">↓</span></a>
             <ContactMenu label={t.talk} labels={t.contactMenu} className="nav-contact" />
             <MobileNavigation label={t.menu} items={navigation} navigationLabel={locale === "en" ? "Mobile navigation" : "پیمایش موبایل"} />
           </div>
         </div>
       </header>
       <main id="main">
+        <SectionMotion />
         <section className="hero shell" aria-labelledby="hero-title">
           <div className="hero-copy">
             <div className="hero-identity">

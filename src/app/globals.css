@@ -428,3 +428,72 @@ html[lang="fa"] .hero .hero-name { line-height: 1.4; }
 @media (max-width: 760px) {
   .nav-contact { font-size: 14px; }
 }
+
+/* Distinct, quiet section surfaces; the established typography stays intact. */
+.header-cv { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 43px; padding: 10px 15px; border: 1px solid #69765a; border-radius: 6px; font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .2s, border-color .2s, transform .2s; }
+.header-cv:hover { border-color: var(--accent); background: #252e1d; transform: translateY(-2px); }
+.header-cv>span { font-size: 18px; color: var(--accent); }
+.hero { gap: 32px 64px; padding-top: 48px; }
+.hero-identity { padding-bottom: 4px; }
+.hero-actions { margin-top: 24px; }
+.portrait-image { box-shadow: 0 14px 40px #0004; }
+.section, .contact-section { margin-top: 44px; padding: 44px 36px; border: 1px solid #343e2d; border-radius: 16px; }
+#work { background: #0b0e0b; border-color: #394730; }
+#services { background: #1c201a; }
+#about { background: #141d15; }
+#experience { background: #141714; }
+#education { background: #1b1e19; }
+#recommendation { background: #111910; }
+#contact { background: #20261b; margin-bottom: 36px; border-color: #566944; }
+.section-heading { margin-bottom: 30px; }
+.section-heading .eyebrow>span, .contact-section>.eyebrow>span { color: #bed2a5; }
+.project-card { border-color: #3c4732; box-shadow: 0 8px 24px #0002; transition: border-color .25s, box-shadow .25s, transform .25s; }
+.project-featured { border-color: #647e48; background: #1b2417; }
+.project-card:hover { border-color: #81976b; box-shadow: 0 16px 32px #0004; transform: translateY(-3px); }
+.project-image-link { transition: transform .3s, border-color .3s, box-shadow .3s; }
+.project-image-link:hover { transform: translateY(-2px); box-shadow: 0 10px 24px #0005; }
+.service-card { background: #151a12; transition: transform .25s, border-color .25s, box-shadow .25s; }
+.service-card:hover { box-shadow: 0 12px 24px #0003; }
+.credential-card { background: #141a12; transition: border-color .25s, box-shadow .25s; }
+.credential-card:hover { border-color: #7c9067; box-shadow: 0 8px 24px #0003; }
+.timeline-entry:before { box-shadow: 0 0 0 5px #141714; }
+.recommendation-card { background: #1b2317; }
+.contact-details { border-top-color: #4d5c3e; }
+.case-link, .text-link, .hero-contact-links a, .footer>a { transition: color .2s, border-color .2s, gap .2s; }
+.case-link:hover, .text-link:hover { color: var(--accent); }
+.section[data-reveal], .contact-section[data-reveal] { transition: opacity .6s ease, transform .6s cubic-bezier(.2,.65,.3,1); }
+[data-reveal="pending"] { opacity: 0; transform: translateY(16px); }
+[data-reveal="visible"], [data-reveal="pending"]:focus-within { opacity: 1; transform: none; }
+@media (max-width: 1050px) {
+  .header-actions { gap: 10px; }
+  .header-cv { gap: 9px; padding-inline: 12px; }
+  .section, .contact-section { padding: 36px 26px; }
+}
+@media (max-width: 760px) {
+  html { scroll-padding-top: 132px; }
+  .header-inner { display: grid; grid-template-columns: minmax(0,1fr) auto auto; height: auto; padding-block: 10px; gap: 8px 10px; }
+  .header-actions { display: contents; }
+  .wordmark { grid-column: 1; grid-row: 1; width: fit-content; }
+  .language-switch { grid-column: 2 / -1; grid-row: 1; justify-self: end; }
+  .header-cv { grid-column: 1; grid-row: 2; min-height: 40px; }
+  .nav-contact { grid-column: 2; grid-row: 2; min-height: 40px; }
+  .mobile-menu { grid-column: 3; grid-row: 2; }
+  .mobile-menu>summary { height: 40px; }
+  .hero { gap: 21px 18px; padding-top: 28px; }
+  .hero-actions { margin-top: 0; }
+  .section, .contact-section { margin-top: 28px; padding: 28px 20px; border-radius: 12px; }
+  .section-heading { margin-bottom: 24px; }
+  .project-card { padding: 20px; }
+}
+@media (max-width: 360px) {
+  .hero { grid-template-columns: minmax(0,1fr) 94px; gap: 20px 13px; }
+  .header-cv { font-size: 13px; gap: 8px; padding-inline: 10px; }
+  .section, .contact-section { padding-inline: 16px; }
+  .project-card { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+@media print {
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
