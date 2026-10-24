@@ -1,0 +1,68 @@
+/* The original SVG is a static, cacheable cloud texture; only the image strips
+   translate. Each strip holds two identical tiles, so a one-tile translation
+   wraps seamlessly without turnarounds, pulsing, or animated SVG filters. */
+.hero, .work-section, .contact-section { position: relative; isolation: isolate; }
+.atmosphere {
+  --mist-tile: clamp(640px, 100vw, 1440px);
+  position: absolute;
+  inset: -40px -32px;
+  z-index: -1;
+  overflow: clip;
+  contain: paint;
+  pointer-events: none;
+  user-select: none;
+  border-radius: inherit;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent),
+    linear-gradient(transparent, #000 12%, #000 82%, transparent);
+  mask-composite: intersect;
+}
+.mist-layer {
+  position: absolute;
+  top: -4%;
+  left: 0;
+  width: calc(var(--mist-tile) * 2);
+  height: 600px;
+  background: url("/textures/mist.svg") 0 0 / var(--mist-tile) 100% repeat-x;
+  opacity: .42;
+  animation: mist-travel 24s linear -8s infinite;
+}
+.mist-layer:nth-child(2) {
+  top: 19%;
+  height: 500px;
+  opacity: .28;
+  animation-duration: 28s;
+  animation-delay: -19s;
+  animation-direction: reverse;
+}
+.mist-layer:nth-child(3) {
+  top: 4%;
+  height: 390px;
+  opacity: .2;
+  animation-duration: 22s;
+  animation-delay: -14s;
+}
+.atmosphere--work { inset-block: 0; opacity: .22; }
+.atmosphere--work .mist-layer { top: 2%; }
+.atmosphere--contact { inset: 0; opacity: .75; }
+.atmosphere--contact .mist-layer { top: -35%; }
+.atmosphere--contact .mist-layer:nth-child(2) { top: -5%; }
+@keyframes mist-travel {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+@media (max-width: 900px) {
+  .atmosphere { inset-inline: -18px; }
+  .atmosphere--contact { inset-inline: 0; }
+}
+@media (max-width: 600px) {
+  .mist-layer { top: 1%; height: 540px; }
+  .mist-layer:nth-child(2) { top: 25%; height: 460px; }
+  .mist-layer:nth-child(3) { top: 8%; height: 360px; }
+  .atmosphere--contact .mist-layer { top: -12%; }
+  .atmosphere--contact .mist-layer:nth-child(2) { top: 12%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mist-layer { animation: none; transform: translate3d(-25%, 0, 0); }
+  .atmosphere { opacity: .2; }
+}
