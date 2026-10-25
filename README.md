@@ -22,9 +22,9 @@ The build generates route types required by TypeScript. No dependencies or deplo
 
 ## Branch baseline and preserved work
 
-This refinement starts from `origin/main` at `f72aa90` (PR #12 merged), which already includes the reviewed asymmetric art direction (`1e5b1f0`) and the latest element-level scroll reveals. Every existing remote feature branch was fetched and checked for ancestry; all are included in that main commit. The working tree was clean before creating `feat/readable-atmospheric-mist`. Existing work and branches were not reset, overwritten, or removed.
+The initial width/readability refinement started from `origin/main` at `f72aa90`. This portrait/global-smoke follow-up continues the **same** `feat/readable-atmospheric-mist` branch at `e351e5a`; it does not replace its reviewed asymmetric layout or scroll reveals. The only new uploaded asset was copied byte-for-byte from `origin/main` at `610f0f3`. No main-branch merge, branch reset, or deployment was performed.
 
-All original assets, PDFs, factual copy, SEO metadata, identity/contact config, contact dialog, and mobile navigation logic remain unchanged. Only ornamental terminal periods were removed from bilingual headings; sentence punctuation and the exact recommendation remain intact. English is the default at `/`; Persian is at `/fa`. Routes preserve language through navigation and refresh. The native contact dialog retains keyboard containment, focus restoration, Escape/outside-click closing, touch handling, and its mobile bottom sheet. There is one header Let's Talk control and two CV downloads (header and About).
+All original portrait/project images, PDFs, factual copy, SEO metadata, identity/contact values, contact dialog, and mobile navigation logic remain unchanged. The portrait source now points to the supplied `public/images/profile.png`. Only ornamental terminal periods were removed from bilingual headings; sentence punctuation and the exact recommendation remain intact. English is the default at `/`; Persian is at `/fa`. Routes preserve language through navigation and refresh. The native contact dialog retains keyboard containment, focus restoration, Escape/outside-click closing, touch handling, and its mobile bottom sheet. There is one header Let's Talk control and two CV downloads (header and About).
 
 ## Creative compositions
 
@@ -47,20 +47,29 @@ The main shell now grows to **1360px** (about **1344px at a 1440px viewport**), 
 
 Main supporting copy is **18px on desktop and 16px on mobile**; secondary labels and contribution tags are 15px/14px. Body line height is 1.7 in English and 1.85 in Persian. Name/title prominence and the asymmetric image/text relationships remain intact. Project images reserve their original 1672:941 ratio, avoiding fractional layout changes when optimized lazy images finish loading. Decorative name dots, heading end periods, subtitle dashes, and ornamental bullets were removed; meaningful numbering and functional icons remain.
 
-`Atmosphere` is a server-rendered decorative component with no client bundle or additional dependency. Its original, locally maintained SVG texture (`public/textures/mist.svg`) combines fractal noise with displaced, soft curved banks to form irregular gray-green wisps. The SVG filter parameters are static; CSS animates only the textured strips. Three independent Hero layers travel continuously over **22, 24, and 28 seconds**, with different starting phases and a secondary countercurrent. Each strip holds two identical horizontal tiles and travels exactly one tile per cycle, giving a seamless wrap without back-and-forth turnarounds. Opacity stays stable rather than pulsing; soft edge masks avoid cutoffs. Selected Work has one much fainter layer and Contact has two. Calm sections retain clean backgrounds. Paint containment and clipping bound the footprint; isolated negative stacking keeps every layer behind content. They are hidden from assistive technology and cannot intercept pointer input.
+`Atmosphere` is now one decorative **fixed viewport canvas**, mounted once by `Document` behind all page content, including the footer. It replaces the separate section-local cloud layers and the unused cloud SVG. Seven gray-green, translucent trails evolve procedurally: their curved centerlines curl and drift, local ribbon widths stretch and taper, and independent lifetimes gently disperse and reform. The motion changes actual geometry rather than translating an unchanged image. Nested low-opacity fills soften the edges without per-frame blur/noise filters or external animation libraries.
 
-CSS motion starts without hovering or JavaScript. Reduced-motion preferences, including a live change, stop all haze animation and soften the remaining static atmosphere. Existing scroll reveals remain unchanged.
+The backing buffer is capped at **960 × 800 pixels**, independent of document height and high-DPI screens. Painting is limited to at most 24fps; points/buffers and the tint gradient are reused. Animation pauses when the document is hidden and stops for reduced motion, including live preference changes. Resize and unmount clean up observers/listeners/animation frames. Without JavaScript or a 2D context, the decorative layer stays empty and the server-rendered portfolio remains readable.
+
+A viewport observer smoothly adjusts one continuous layer: moderate in the Hero, soft in Work/About, very light through Services/Experience/Education, and gentle through Recommendation/Contact/Footer. The latter surfaces retain their dark colors with slight translucency so the background can continue beneath them. The canvas is hidden from assistive technology, receives no pointer events, and paints behind all text, images, and controls. Existing scroll reveals remain unchanged.
+
+## Uploaded portrait: source limitation
+
+`public/images/profile.png` is **1086 × 1448, RGB, fully opaque**. Its apparent transparency checkerboard is baked into the pixels; it has no alpha channel. Its Git blob hash matches the uploaded source (`754220b027a634682ec785bc8e71df0ff94cbd50`). It is used as supplied, with `object-fit: contain`, natural proportions, zero CSS border/radius/background/shadow, and no clipping or retouching. The full supplied shoulder/arm silhouette and pose are retained on desktop and mobile.
+
+A seamless transparent cutout **cannot be verified or delivered from this file while preserving it unchanged**. Replace that asset with a genuinely transparent PNG at the same path to complete the intended integration. No substitute portrait, background-removal operation, or invented missing body detail was introduced.
 
 ## Source organization
 
 - `src/app/globals.css`: retained shared typography, readability tokens, accessibility, and existing UI controls.
 - `src/app/art-direction.css`: the focused composition layer, imported after the shared stylesheet by `Document`; includes responsive and RTL art direction.
-- `src/components/portfolio.tsx`: preserved editorial content structure, with decorative atmosphere placements and cleaned heading punctuation.
-- `src/components/atmosphere.tsx`, `src/app/atmosphere.css`: bounded CSS-only ambient motion, placement variants, and reduced-motion fallback.
+- `src/components/portfolio.tsx`: preserved editorial content structure; section-local atmosphere placements removed in favor of the single global layer.
+- `src/components/atmosphere.tsx`, `src/app/atmosphere.css`: bounded procedural Canvas 2D motion, density transitions, and visibility/reduced-motion lifecycle.
+- `src/components/document.tsx`: mounts the one global decorative background for both languages.
 - `src/components/section-motion.tsx`: one-time scroll reveals and progressive enhancement.
 - `src/components/contact-menu.tsx`, `mobile-navigation.tsx`: existing interactions, unchanged.
 - `src/content/en.ts`, `src/content/fa.ts`: preserved factual translations; ornamental heading end periods removed.
-- `src/config/site.ts`: unchanged verified identity, real asset paths, and contact/project/XGen URLs.
+- `src/config/site.ts`: verified identity/contact/project/XGen values preserved; portrait updated to the actual uploaded path.
 - `src/content/metadata.ts`: unchanged SEO and language alternates.
 
 ## Motion and accessibility
@@ -75,7 +84,7 @@ Browser validation covers both languages at 1920, 1440, 1024, 768, 390, and 320p
 
 Separate ordinary-motion tests scroll desktop and mobile without hovering, verify varied animation frames/timing/stagger, ensure every ready target reveals once, and confirm no replay, stranded hidden content, height changes, or reveal-induced layout shifts. Failure and reduced-motion fallbacks are exercised independently.
 
-The smoke visibility acceptance check captures the actual production-preview Hero at **0, 5, and 10 seconds without mouse movement or scrolling**, in English/Persian at 1440px and 390px. Visual frame comparisons show recognizable banks traveling across the name/title area, rather than tiny changes in smooth gradient brightness. Between captures, roughly 17–21% of viewport pixels change by at least 8 RGB levels; text remains still and the portrait is unobscured. Rendered-background sampling under Hero text at these phases stays above 5.2:1 contrast. Separate checks straddle a tile-wrap boundary and confirm no visible jump, no page-height change or motion-induced layout shift after font loading, live reduced-motion stopping, and CSS animation with JavaScript disabled. A standalone compositor check records no repeated layer paints during drift on desktop or mobile. Contact/CV/navigation regressions and the existing scroll-reveal checks also pass.
+Global smoke verification captures normal-motion browser frames in English/Persian at desktop, tablet, and mobile sizes. It checks stationary time-separated captures throughout Hero, Work, Services, About, Experience, Education, Recommendation, Contact, and Footer; verifies that trail geometry deforms, canvas pixels change, and the background remains visible beyond the Hero/footer; and checks reduced-motion stopping, bounded allocation, no overflow, and no motion-induced layout shifts. Hero screenshots retain the supplied opaque portrait so the source limitation is visible rather than concealed. Existing contact/CV/navigation regressions and one-time scroll reveals are verified separately.
 
 External Behance, XGen, and LinkedIn requests are blocked by this environment's outbound proxy (HTTP 403). Exact rendered destinations and safe new-tab attributes are checked locally, but remote availability cannot be established here. No missing portrait or other unsupported endorsement was invented.
 

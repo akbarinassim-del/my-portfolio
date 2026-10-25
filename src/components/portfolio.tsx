@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Atmosphere } from "./atmosphere";
 import { ContactMenu } from "./contact-menu";
 import { SectionMotion } from "./section-motion";
 import { MobileNavigation } from "./mobile-navigation";
@@ -61,7 +60,6 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
       <main id="main">
         <SectionMotion />
         <section className="hero shell" aria-labelledby="hero-title">
-          <Atmosphere variant="hero" />
           <div className="hero-copy">
             <div className="hero-identity">
               <p className="eyebrow hero-eyebrow">{t.hero.eyebrow}</p>
@@ -89,7 +87,6 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
         </section>
 
         <section id="work" className="section shell work-section" aria-labelledby="work-title">
-          <Atmosphere variant="work" />
           <SectionHeading id="work-title" number="01" label={t.work.label} title={t.work.title} intro={t.work.intro} />
           <p className="collaboration-note">{t.work.shared}</p>
           <div className="projects-grid">{projects.map((project, index) => {
@@ -188,7 +185,6 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
         </section>
 
         <section id="contact" className="contact-section shell" aria-labelledby="contact-title">
-          <Atmosphere variant="contact" />
           <p className="eyebrow"><span aria-hidden="true">07</span>{t.contact.label}</p>
           <h2 id="contact-title">{t.contact.title}</h2>
           <p className="contact-description">{t.contact.description}</p>
