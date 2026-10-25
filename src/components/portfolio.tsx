@@ -66,23 +66,24 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <h1 id="hero-title" className="hero-name">{t.name.split(" ").map((part, index) => <span key={index}>{index > 0 ? " " : ""}{part}</span>)}</h1>
               <h2 className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</h2>
             </div>
+            <figure className="portrait">
+              <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 346px) 208px, (max-width: 420px) 60vw, (max-width: 600px) 252px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
+              <figcaption>{t.hero.caption}</figcaption>
+            </figure>
             <div className="hero-story">
-            <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
-            <p className="hero-description">{t.hero.description}</p>
-            <div className="hero-actions">
-              <a className="button button-secondary" href="#work">{t.hero.explore}<Arrow /></a>
-            </div>
-            <address className="hero-contact-links">
-              <a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a>
-              <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
-              <a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a>
-            </address>
+              <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
+              <p className="hero-description">{t.hero.description}</p>
+              <p className="hero-mobile-intro">{t.hero.mobileIntro}</p>
+              <div className="hero-actions">
+                <a className="button button-secondary" href="#work">{t.hero.explore}<Arrow /></a>
+              </div>
+              <address className="hero-contact-links">
+                <a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a>
+                <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
+                <a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a>
+              </address>
             </div>
           </div>
-          <figure className="portrait">
-            <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 600px) 110px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
-            <figcaption>{t.hero.caption}</figcaption>
-          </figure>
           <div className="hero-bottom"><p>{t.hero.audience}</p><a href="#work">{t.hero.scroll}<span aria-hidden="true">↓</span></a></div>
         </section>
 
@@ -136,7 +137,6 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
             <a className="button button-secondary" href={site.cv} download="Nasim-Akbari-CV.pdf">{t.download}<span aria-hidden="true">↓</span></a>
             <a className="text-link" href={site.profile} target="_blank" rel="noopener noreferrer">{t.about.profile}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
           </div>
-          <ul className="principles">{t.about.principles.map(principle => <li key={principle}>{principle}</li>)}</ul>
         </section>
 
         <section id="experience" className="section shell" aria-labelledby="experience-title">

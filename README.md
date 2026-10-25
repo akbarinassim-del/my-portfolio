@@ -22,22 +22,24 @@ The build generates route types required by TypeScript. No dependencies or deplo
 
 ## Branch baseline and preserved work
 
-The initial width/readability refinement started from `origin/main` at `f72aa90`. This portrait/global-smoke follow-up continues the **same** `feat/readable-atmospheric-mist` branch at `e351e5a`; it does not replace its reviewed asymmetric layout or scroll reveals. The only new uploaded asset was copied byte-for-byte from `origin/main` at `610f0f3`. No main-branch merge, branch reset, or deployment was performed.
+This final UI refinement continues the existing **`feat/readable-atmospheric-mist`** branch from **`fd576fa`**, the reviewed version with the transparent olive-outfit portrait and continuous page-wide smoke. That version has not been merged into main; no older main-branch implementation was substituted.
 
-All original portrait/project images, PDFs, factual copy, SEO metadata, identity/contact values, contact dialog, and mobile navigation logic remain unchanged. The portrait source now points to the supplied `public/images/profile.png`. Only ornamental terminal periods were removed from bilingual headings; sentence punctuation and the exact recommendation remain intact. English is the default at `/`; Persian is at `/fa`. Routes preserve language through navigation and refresh. The native contact dialog retains keyboard containment, focus restoration, Escape/outside-click closing, touch handling, and its mobile bottom sheet. There is one header Let's Talk control and two CV downloads (header and About).
+All original assets/PDFs, project descriptions/contributions/team credits, service/process content, biography, employers, education/certification, exact recommendation/attribution, and contact URLs are preserved. The revised bilingual copy is limited to a concise mobile-only introduction, the Selected Work headline, and the closing contact headline/supporting sentence. The decorative About value row is removed. There is still one header Let's Talk control and two CV downloads (header and About). English remains `/`; Persian remains `/fa` with RTL.
+
+The smoke renderer/CSS, scroll-reveal component, header/contact/mobile-navigation interactions, portrait asset, site config, and deployment settings are unchanged from the reviewed baseline.
 
 ## Creative compositions
 
 This is an original asymmetric editorial implementation using existing content and assets:
 
-- **Hero:** prominent two-line name with an offset second line, clearly visible unchanged professional title, an inset supporting-text column, and a portrait aligned off the primary text axis. Mobile retains the bold identity while opening the description/CTA into readable full-width rows.
+- **Hero:** the desktop composition is preserved exactly. Below 600px, the identity is followed by a centered 208–252px portrait, one concise introduction, View My Work, and existing contact links. Full shoulders/arms/pose and alpha transparency are preserved with `object-fit: contain`. Header placement and actions are unchanged.
 - **Selected Work:** BeatPass is image-dominant and full width. EcoGold integrates text beside a right-hand cover; Shipply reverses the image/text relationship and shifts the composition inward. Tablet/mobile collapse these arrangements into a clear reading order. All original project copy, contributions, team credit, artwork proportions, and Behance links remain intact.
 - **Services:** numbered editorial rows replace repeated cards. The middle row is inset on larger screens; mobile follows a consistent readable single-column flow.
-- **About:** smaller left-hand editorial heading with larger right-weighted identity prose, background text, profile link, and CV action.
+- **About:** the open two-column editorial biography and actions remain; the decorative slogan row is removed. Design Process keeps its top rule but loses the redundant bottom rule, leaving the intentional About top divider with a shorter transition gap.
 - **Experience:** a compact margin-led timeline, clearly separating dates, company, role, and responsibilities.
-- **Education:** an offset section with a minimal degree entry and a smaller, lower certification surface.
-- **Recommendation:** one restrained green-tinted editorial quote block, exact supplied attribution and translation, and the original-source link.
-- **Contact:** a larger typographic ending with normal-sized, directly clickable email/phone/LinkedIn information. The email is not used as an oversized headline.
+- **Education:** offset open degree/certification entries retain the asymmetric positions, dates, and certificate verification link; the filled green certification rectangle is removed.
+- **Recommendation:** a quieter charcoal quote panel with softened corners, comfortable typography, exact recommendation/attribution, and the original-source link.
+- **Contact:** an open editorial ending headed “Let’s work together,” with a restrained type scale, concise supporting sentence, and directly clickable email/phone/LinkedIn links. Desktop uses offset columns; mobile stacks the details with 44px link targets.
 
 Logical grid placement and inline spacing mirror layouts in Persian. Real images are not retouched, regenerated, distorted, or cropped. The portrait's generic caption is hidden on small screens to avoid unnecessary height; all factual content remains available.
 
@@ -51,19 +53,17 @@ Main supporting copy is **18px on desktop and 16px on mobile**; secondary labels
 
 The backing buffer is capped at **960 × 800 pixels**, independent of document height and high-DPI screens. Painting is limited to at most 24fps; points/buffers and the tint gradient are reused. Animation pauses when the document is hidden and stops for reduced motion, including live preference changes. Resize and unmount clean up observers/listeners/animation frames. Without JavaScript or a 2D context, the decorative layer stays empty and the server-rendered portfolio remains readable.
 
-A viewport observer smoothly adjusts one continuous layer: moderate in the Hero, soft in Work/About, very light through Services/Experience/Education, and gentle through Recommendation/Contact/Footer. The latter surfaces retain their dark colors with slight translucency so the background can continue beneath them. The canvas is hidden from assistive technology, receives no pointer events, and paints behind all text, images, and controls. Existing scroll reveals remain unchanged.
+A viewport observer smoothly adjusts one continuous layer: moderate in the Hero, soft in Work/About, very light through Services/Experience/Education, and gentle through Recommendation/Contact/Footer. The open closing section and understated charcoal recommendation panel keep the existing background behind readable content. The canvas is hidden from assistive technology, receives no pointer events, and paints behind all text, images, and controls. Existing scroll reveals remain unchanged.
 
-## Uploaded portrait: source limitation
+## Transparent portrait
 
-`public/images/profile.png` is **1086 × 1448, RGB, fully opaque**. Its apparent transparency checkerboard is baked into the pixels; it has no alpha channel. Its Git blob hash matches the uploaded source (`754220b027a634682ec785bc8e71df0ff94cbd50`). It is used as supplied, with `object-fit: contain`, natural proportions, zero CSS border/radius/background/shadow, and no clipping or retouching. The full supplied shoulder/arm silhouette and pose are retained on desktop and mobile.
-
-A seamless transparent cutout **cannot be verified or delivered from this file while preserving it unchanged**. Replace that asset with a genuinely transparent PNG at the same path to complete the intended integration. No substitute portrait, background-removal operation, or invented missing body detail was introduced.
+The approved `public/images/prof.png` remains byte-for-byte unchanged: **1086 × 1448 RGBA**, with genuine transparent background pixels and the full supplied silhouette. Its blob hash is `1be01a7e6baa5c84531a89e17ba6b76a40acebf2`. No image regeneration, recoloring, retouching, cropping, stretching, frame, or opaque background is introduced. Mobile uses larger responsive image candidates; desktop image dimensions/placement and appearance are preserved.
 
 ## Source organization
 
 - `src/app/globals.css`: retained shared typography, readability tokens, accessibility, and existing UI controls.
 - `src/app/art-direction.css`: the focused composition layer, imported after the shared stylesheet by `Document`; includes responsive and RTL art direction.
-- `src/components/portfolio.tsx`: preserved editorial content structure; section-local atmosphere placements removed in favor of the single global layer.
+- `src/components/portfolio.tsx`: preserved desktop structure, with identity/portrait/introduction in logical reading order and a mobile-only supporting introduction; the About slogan row is removed.
 - `src/components/atmosphere.tsx`, `src/app/atmosphere.css`: bounded procedural Canvas 2D motion, density transitions, and visibility/reduced-motion lifecycle.
 - `src/components/document.tsx`: mounts the one global decorative background for both languages.
 - `src/components/section-motion.tsx`: one-time scroll reveals and progressive enhancement.
@@ -80,11 +80,13 @@ The existing IntersectionObserver/Web Animations pattern reveals elements once, 
 
 ## Validation and limits
 
-Browser validation covers both languages at 1920, 1440, 1024, 768, 390, and 320px: intended asymmetric/stacked composition, name/title/tagline hierarchy, no overflow, natural image ratios, preserved project/link/tag content, action counts, contact accessibility, mobile navigation, language persistence, and actual CV downloads. Automated WCAG A/AA scans run with both the page and dialog open.
+Browser validation covers both languages at 1920, 1440, 1024, 768, 430, 390, 375, and 320px: intended asymmetric/stacked composition, name/title/tagline hierarchy, no overflow, natural image ratios, preserved project/link/tag content, action counts, contact accessibility, mobile navigation, language persistence, and actual CV downloads. Automated WCAG A/AA scans run with both the page and dialog open.
 
 Separate ordinary-motion tests scroll desktop and mobile without hovering, verify varied animation frames/timing/stagger, ensure every ready target reveals once, and confirm no replay, stranded hidden content, height changes, or reveal-induced layout shifts. Failure and reduced-motion fallbacks are exercised independently.
 
-Global smoke verification captures normal-motion browser frames in English/Persian at desktop, tablet, and mobile sizes. It checks stationary time-separated captures throughout Hero, Work, Services, About, Experience, Education, Recommendation, Contact, and Footer; verifies that trail geometry deforms, canvas pixels change, and the background remains visible beyond the Hero/footer; and checks reduced-motion stopping, bounded allocation, no overflow, and no motion-induced layout shifts. Hero screenshots retain the supplied opaque portrait so the source limitation is visible rather than concealed. Existing contact/CV/navigation regressions and one-time scroll reveals are verified separately.
+Pixel comparisons against the saved `fd576fa` baseline verify identical desktop Hero output at **1440px and 1920px in both languages**, and unchanged mobile/tablet headers. Structural checks verify that the larger mobile portrait is centered below the title, followed by one introduction and View My Work, without overlap or overflow. The process end rule is absent, About's top divider remains, certification is open, recommendation is charcoal, and Contact is unboxed.
+
+Smoke and scroll-animation source files are byte-for-byte unchanged. Normal-motion browser checks retain time-varying background pixels, one-time varied/staggered reveals, and reduced-motion stopping; the portrait is rendered above the background with genuine alpha. All four supplied image files and factual portfolio dictionaries are checked for unintended changes. Screenshots are captured from the rendered local production build; the live Vercel Preview address is retrieved separately from the commit's GitHub deployment status.
 
 External Behance, XGen, and LinkedIn requests are blocked by this environment's outbound proxy (HTTP 403). Exact rendered destinations and safe new-tab attributes are checked locally, but remote availability cannot be established here. No missing portrait or other unsupported endorsement was invented.
 

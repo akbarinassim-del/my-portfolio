@@ -34,7 +34,8 @@ export const en = {
     "portrait": "Portrait of Nasim Akbari",
     "caption": "A human perspective. A thoughtful digital experience.",
     "scroll": "Discover the work",
-    "disciplines": "PRODUCT DESIGN / UI·UX / AI-ASSISTED WEB"
+    "disciplines": "PRODUCT DESIGN / UI·UX / AI-ASSISTED WEB",
+    "mobileIntro": "I design intuitive digital products and bring ideas to life through thoughtful design and AI-powered web creation."
   },
   "services": {
     "label": "How I can help",
@@ -60,7 +61,7 @@ export const en = {
   },
   "work": {
     "label": "Selected work",
-    "title": "Designed together. Made for people",
+    "title": "Selected projects, real design challenges",
     "intro": "Three collaborative design projects, each exploring a different everyday challenge.",
     "team": "Collaborative team project",
     "shared": "Shared responsibilities across research, UX, UI, user flows, wireframing, and design systems. The work shown here was created together with a team.",
@@ -140,17 +141,12 @@ export const en = {
     "lead": "I’m Nasim, a Product Designer & AI-Powered Web Creator. I care about making digital experiences clear, useful, and human.",
     "body": "My background includes redesigning enterprise interfaces at Rayvarz and warehouse and HSE workflows at Saniyeh Company, Foolad Mobarakeh Esfahan. That work informs how I approach complex problems: listen, understand the context, and create a clear structure.",
     "closing": "I bring UX research, human-centered design, UI design, and design systems into a collaborative process. Alongside product design, I use AI-assisted website creation to bring ideas to the web with care, clarity, and attention to detail.",
-    "principles": [
-      "People before assumptions",
-      "Clarity over complexity",
-      "Collaboration throughout"
-    ],
     "profile": "View My XGen Profile"
   },
   "contact": {
-    "label": "Let's work together",
-    "title": "Have a project in mind? Let's make it happen",
-    "description": "I'd love to hear about your idea.",
+    "label": "Get in touch",
+    "title": "Let's work together",
+    "description": "Have a project in mind? Let's turn it into a thoughtful digital experience.",
     "email": "Let's Work Together",
     "emailLabel": "Email",
     "phoneLabel": "Phone",
