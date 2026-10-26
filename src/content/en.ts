@@ -34,11 +34,12 @@ export const en = {
     "portrait": "Portrait of Nasim Akbari",
     "caption": "A human perspective. A thoughtful digital experience.",
     "scroll": "Discover the work",
-    "disciplines": "PRODUCT DESIGN / UI·UX / AI-ASSISTED WEB"
+    "disciplines": "PRODUCT DESIGN / UI·UX / AI-ASSISTED WEB",
+    "mobileIntro": "I design intuitive digital products and bring ideas to life through thoughtful design and AI-powered web creation."
   },
   "services": {
     "label": "How I can help",
-    "title": "Your idea. A thoughtful way forward.",
+    "title": "Your idea. A thoughtful way forward",
     "intro": "From the first question to a considered interface, I help shape digital experiences around the people who use them.",
     "items": [
       {
@@ -60,7 +61,7 @@ export const en = {
   },
   "work": {
     "label": "Selected work",
-    "title": "Designed together. Made for people.",
+    "title": "Selected projects, real design challenges",
     "intro": "Three collaborative design projects, each exploring a different everyday challenge.",
     "team": "Collaborative team project",
     "shared": "Shared responsibilities across research, UX, UI, user flows, wireframing, and design systems. The work shown here was created together with a team.",
@@ -113,7 +114,7 @@ export const en = {
   },
   "process": {
     "label": "The design process",
-    "title": "Clarity at every step.",
+    "title": "Clarity at every step",
     "intro": "A flexible, collaborative approach that keeps your goals and your users in focus.",
     "items": [
       {
@@ -136,21 +137,16 @@ export const en = {
   },
   "about": {
     "label": "A little about me",
-    "title": "Design with intention. Create with curiosity.",
+    "title": "Design with intention. Create with curiosity",
     "lead": "I’m Nasim, a Product Designer & AI-Powered Web Creator. I care about making digital experiences clear, useful, and human.",
     "body": "My background includes redesigning enterprise interfaces at Rayvarz and warehouse and HSE workflows at Saniyeh Company, Foolad Mobarakeh Esfahan. That work informs how I approach complex problems: listen, understand the context, and create a clear structure.",
     "closing": "I bring UX research, human-centered design, UI design, and design systems into a collaborative process. Alongside product design, I use AI-assisted website creation to bring ideas to the web with care, clarity, and attention to detail.",
-    "principles": [
-      "People before assumptions",
-      "Clarity over complexity",
-      "Collaboration throughout"
-    ],
     "profile": "View My XGen Profile"
   },
   "contact": {
-    "label": "Let's work together",
-    "title": "Have a project in mind? Let's make it happen.",
-    "description": "I'd love to hear about your idea.",
+    "label": "Get in touch",
+    "title": "Let's work together",
+    "description": "Have a project in mind? Let's turn it into a thoughtful digital experience.",
     "email": "Let's Work Together",
     "emailLabel": "Email",
     "phoneLabel": "Phone",
@@ -162,7 +158,7 @@ export const en = {
   "externalNotice": "opens in a new tab",
   "experience": {
     "label": "Professional experience",
-    "title": "Design grounded in real workflows.",
+    "title": "Design grounded in real workflows",
     "intro": "Experience shaping enterprise interfaces and everyday operational tools.",
     "items": [
       {
@@ -181,7 +177,7 @@ export const en = {
   },
   "education": {
     "label": "Education & certification",
-    "title": "A foundation for thoughtful design.",
+    "title": "A foundation for thoughtful design",
     "degree": "Bachelor of Science in Information Technology Engineering",
     "university": "Kermanshah University of Technology",
     "date": "September 2011 – August 2015",
@@ -193,7 +189,7 @@ export const en = {
   },
   "recommendation": {
     "label": "Professional recommendation",
-    "title": "A perspective from the design community.",
+    "title": "A perspective from the design community",
     "quote": "Nasim isn't afraid to take on challenging projects. She has a strong ability to bring clarity and structure to complex problems. She's responsible, brings great energy to her work, and would be a valuable addition to any team.",
     "name": "Hossein Rezaei",
     "role": "Founder of XGen · Design Director",

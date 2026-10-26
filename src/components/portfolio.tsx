@@ -41,7 +41,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
       <a className="skip-link" href="#main">{t.skip}</a>
       <header className="site-header">
         <div className="shell header-inner">
-          <Link className="wordmark" href={locale === "en" ? "/" : "/fa"} aria-label={t.home}><span lang="en" dir="ltr">nasim<span className="accent">.</span></span></Link>
+          <Link className="wordmark" href={locale === "en" ? "/" : "/fa"} aria-label={t.home}><span lang="en" dir="ltr">nasim</span></Link>
           <nav className="desktop-nav" aria-label={locale === "en" ? "Main navigation" : "پیمایش اصلی"}>
             {desktopNavigation.map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
           </nav>
@@ -66,24 +66,25 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <h1 id="hero-title" className="hero-name">{t.name.split(" ").map((part, index) => <span key={index}>{index > 0 ? " " : ""}{part}</span>)}</h1>
               <h2 className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</h2>
             </div>
+            <figure className="portrait">
+              <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 346px) 208px, (max-width: 420px) 60vw, (max-width: 600px) 252px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
+              <figcaption>{t.hero.caption}</figcaption>
+            </figure>
             <div className="hero-story">
-            <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
-            <p className="hero-description">{t.hero.description}</p>
-            <div className="hero-actions">
-              <a className="button button-secondary" href="#work">{t.hero.explore}<Arrow /></a>
-            </div>
-            <address className="hero-contact-links">
-              <a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a>
-              <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
-              <a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a>
-            </address>
+              <p className="hero-tagline">{t.hero.headline} {t.hero.highlight}</p>
+              <p className="hero-description">{t.hero.description}</p>
+              <p className="hero-mobile-intro">{t.hero.mobileIntro}</p>
+              <div className="hero-actions">
+                <a className="button button-secondary" href="#work">{t.hero.explore}<Arrow /></a>
+              </div>
+              <address className="hero-contact-links">
+                <a href={`mailto:${site.contact.email}`}><bdi dir="ltr">{site.contact.email}</bdi></a>
+                <a href={site.contact.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedinLabel}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
+                <a href={site.contact.phoneHref}><bdi dir="ltr">{site.contact.phone}</bdi></a>
+              </address>
             </div>
           </div>
-          <figure className="portrait">
-            <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 600px) 110px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
-            <figcaption>{t.hero.caption}</figcaption>
-          </figure>
-          <div className="hero-bottom"><p><span className="status-dot" aria-hidden="true" />{t.hero.audience}</p><a href="#work">{t.hero.scroll}<span aria-hidden="true">↓</span></a></div>
+          <div className="hero-bottom"><p>{t.hero.audience}</p><a href="#work">{t.hero.scroll}<span aria-hidden="true">↓</span></a></div>
         </section>
 
         <section id="work" className="section shell work-section" aria-labelledby="work-title">
@@ -96,13 +97,13 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
                 <div className="project-top">
                   <div>
                     <p className="project-kind"><span aria-hidden="true">0{index + 1}</span>{t.work.team}</p>
-                    <h3><bdi lang="en">{project.name}</bdi><span className="project-subtitle"> — {content.title}</span></h3>
+                    <h3><bdi lang="en">{project.name}</bdi><span className="project-subtitle">{content.title}</span></h3>
                     <p className="project-category">{content.category}</p>
                   </div>
                   <a className="case-link" href={project.href} target="_blank" rel="noopener noreferrer">{t.work.view}<Arrow diagonal /><span className="sr-only"> — {project.name}, {t.work.newTab}</span></a>
                 </div>
                 <a className="project-image-link" href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`${project.name} — ${t.work.view} (${t.work.newTab})`}>
-                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1400px) 90vw, 1200px" : "(max-width: 900px) 92vw, (max-width: 1400px) 55vw, 720px"} className="project-image" />
+                  <Image src={project.image} alt={content.alt} width={1672} height={941} sizes={index === 0 ? "(max-width: 760px) 92vw, (max-width: 1456px) 94vw, 1360px" : "(max-width: 900px) 92vw, (max-width: 1400px) 55vw, 720px"} className="project-image" />
                 </a>
                 <div className="project-bottom">
                   <p className="project-description">{content.description}</p>
@@ -136,7 +137,6 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
             <a className="button button-secondary" href={site.cv} download="Nasim-Akbari-CV.pdf">{t.download}<span aria-hidden="true">↓</span></a>
             <a className="text-link" href={site.profile} target="_blank" rel="noopener noreferrer">{t.about.profile}<Arrow diagonal /><span className="sr-only"> — {t.externalNotice}</span></a>
           </div>
-          <ul className="principles">{t.about.principles.map(principle => <li key={principle}><span className="principle-dot" aria-hidden="true" />{principle}</li>)}</ul>
         </section>
 
         <section id="experience" className="section shell" aria-labelledby="experience-title">
@@ -197,7 +197,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
 
 
       </main>
-      <footer className="shell footer"><div><span className="footer-name">{t.name}<span className="accent">.</span></span><p>{t.footer}</p></div><p className="copyright">© {new Date().getFullYear()} <bdi>{site.name}</bdi></p><a href="#main">{t.top}<span aria-hidden="true">↑</span></a></footer>
+      <footer className="shell footer"><div><span className="footer-name">{t.name}</span><p>{t.footer}</p></div><p className="copyright">© {new Date().getFullYear()} <bdi>{site.name}</bdi></p><a href="#main">{t.top}<span aria-hidden="true">↑</span></a></footer>
     </>
   );
 }
