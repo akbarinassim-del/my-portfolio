@@ -24,6 +24,7 @@ export const en = {
   "language": "Choose language",
   "home": "Nasim Akbari — home",
   "hero": {
+    "animatePortrait": "Play Nasim Akbari's portrait animation",
     "eyebrow": "Hello, I'm",
     "headline": "I design digital experiences",
     "highlight": "that come to life.",

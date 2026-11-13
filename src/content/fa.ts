@@ -26,6 +26,7 @@ export const fa: Dictionary = {
   "language": "انتخاب زبان",
   "home": "نسیم اکبری — صفحه اصلی",
   "hero": {
+    "animatePortrait": "پخش پویانمایی پرترهٔ نسیم اکبری",
     "eyebrow": "سلام، من",
     "headline": "تجربه‌های دیجیتالی طراحی می‌کنم",
     "highlight": "که به زندگی می‌آیند.",

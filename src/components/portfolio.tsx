@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ContactMenu } from "./contact-menu";
 import { SectionMotion } from "./section-motion";
 import { MobileNavigation } from "./mobile-navigation";
+import { HeroPortrait } from "./hero-portrait";
 import { projects, site } from "@/config/site";
 import type { Dictionary } from "@/content/en";
 
@@ -67,7 +68,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <h2 className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</h2>
             </div>
             <figure className="portrait">
-              <Image src={site.portrait.src} alt={t.hero.portrait} width={site.portrait.width} height={site.portrait.height} sizes="(max-width: 346px) 208px, (max-width: 420px) 60vw, (max-width: 600px) 252px, (max-width: 900px) 230px, 380px" preload className="portrait-image" />
+              <HeroPortrait label={t.hero.portrait} playLabel={t.hero.animatePortrait} />
               <figcaption>{t.hero.caption}</figcaption>
             </figure>
             <div className="hero-story">

@@ -3,7 +3,10 @@ export const site = {
   name: "Nasim Akbari",
   professionalTitle: "Product Designer & AI-Powered Web Creator",
   url: "https://nasim-akbari.vercel.app",
-  portrait: { src: "/images/prof.png", width: 1086, height: 1448 },
+  portrait: {
+    src: "/images/prof.png", width: 1086, height: 1448,
+    video: { src: "/images/Movie-portfolio.webm", poster: "/images/movie-portfolio-poster.png" },
+  },
   cv: "/Nasim-Akbari-CV.pdf",
   profile: "https://talents.xgen.design/#nasim-akbari",
   certificate: "https://xgen.design/certificate/XGA-UIHack-2-2025-C302-8319/",
