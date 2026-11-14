@@ -196,7 +196,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       cancelFrameWait();
       try {
         media.muted = true;
-        media.playbackRate = 1;
+        media.playbackRate = direction === "intro" ? .5 : 1;
         await media.play();
         if (currentAttempt !== attempt || currentPlayback !== playback || disposed || active !== direction) return;
         if (!allowed()) { media.pause(); state("paused"); return; }

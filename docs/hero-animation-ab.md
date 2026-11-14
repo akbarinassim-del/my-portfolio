@@ -6,12 +6,14 @@
 | --- | --- | --- |
 | Branch | `feat/interactive-video-portrait` | `feat/hero-short-intro` |
 | Base | `de71e16b8865b48e5f382f06878b4105f0ca227c` | Isolated worktree/branch from A |
-| First automatic clip | Original forward animation, 10.04 seconds | New 2.00-second settling gesture |
+| First automatic clip | Original forward animation, 10.04 seconds | Same settling gesture played over 4 seconds |
 | Pose held after discovery | Original final, front-facing pose | Exact original starting pose |
 | First later hover/tap/key activation | Full reverse, then full forward | Full forward, then full reverse |
 | Later clips | Original full-length encodings | The same unchanged full-length encodings |
 
 A's branch, files and Preview are not overwritten. B is an experiment for comparison, not a selected replacement. The same one-time visibility policy, 500 ms delay, reduced-motion behavior, keyboard/touch activation, tab pause/resume, transparent fallback and contact glow are retained.
+
+B's introductory asset is unchanged: its encoded duration remains 2 seconds, played at positive rate 0.5 for a four-second presentation. Full manual forward/reverse clips remain at rate 1. No footage or other website behavior is changed by this duration adjustment.
 
 For a fair comparison, reload each Preview with the pointer away from the portrait. An explicit activation before the automatic delay takes precedence and starts the full manual animation, as in A.
 
@@ -63,7 +65,7 @@ If the browser denies B's introductory autoplay, the exact first still remains v
 Production builds were run independently from the untouched A checkout and the isolated B worktree. Chromium 154 on Linux, including mobile touch emulation, verified:
 
 - A's 10.04-second autoplay still completes naturally and holds the original final pose; its manual reverse/forward sequence is unchanged.
-- B's 2-second intro completes naturally on desktop/touch in both languages, holds the exact starting pose and does not repeat after scrolling away and back.
+- B's intro completes naturally, holds the exact starting pose and does not repeat after scrolling away and back. The duration adjustment presents the same intro over four seconds.
 - B's first later interaction plays the unchanged 10.04-second forward clip, then the 10-second reverse clip. A full manual forward run was also observed naturally to completion. Extra inputs and pointer exit do not restart or interrupt playback.
 - Independent decoder alpha checks pass for all active clips. The intro-to-PNG handoff has exactly matching rendered alpha; solid-subject RGB differences are only browser decoding rounding (mean 0.45, max 3 on a 0–255 channel), with no framing or pose discontinuity.
 - A and B's content, header and page/Hero geometry match at 1920, 1440, 768, 430, 390, 375 and 320 px in both languages (14 pairs). No horizontal overflow is introduced.
