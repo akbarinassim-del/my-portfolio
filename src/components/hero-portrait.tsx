@@ -43,6 +43,12 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     let videoFrame = 0;
     let frameMedia: HTMLVideoElement | undefined;
     let animationFrame = 0;
+    const hero = control.closest(".hero");
+    let heroVisible = false;
+    let initialAutoplayUsed = preference.matches;
+    let autoplayBlocked = false;
+    let autoplayTimer = 0;
+    let heroObserver: IntersectionObserver | undefined;
 
     const allowed = () => !disposed && !failed && !preference.matches && !document.hidden;
     const destination = (direction: Direction): Endpoint => direction === "forward" ? "last" : "first";
@@ -63,9 +69,51 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       frameMedia = undefined;
     };
 
+    function consumeInitialAutoplay() {
+      initialAutoplayUsed = true;
+      window.clearTimeout(autoplayTimer);
+      heroObserver?.disconnect();
+      window.removeEventListener("scroll", updateHeroVisibility);
+      window.removeEventListener("resize", updateHeroVisibility);
+    }
+
+    function scheduleInitialAutoplay() {
+      window.clearTimeout(autoplayTimer);
+      if (initialAutoplayUsed || !heroVisible || !allowed() || active) return;
+      autoplayTimer = window.setTimeout(() => {
+        if (!initialAutoplayUsed && heroVisible && allowed() && !active) void play(true);
+      }, 500);
+    }
+
+    function updateHeroVisibility() {
+      if (!hero) return;
+      const rect = hero.getBoundingClientRect();
+      const visibleHeight = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+      heroVisible = visibleHeight / Math.max(rect.height, 1) >= .1;
+      scheduleInitialAutoplay();
+    }
+
+    function recoverBlockedPlayback() {
+      autoplayBlocked = true;
+      control.dataset.autoplay = "blocked";
+      playback++;
+      cancelFrameWait();
+      Object.values(clips).forEach(media => media.pause());
+      if (phase !== "paused") {
+        // A denied first play must retain its starting still and a working manual control.
+        attempt++;
+        pending?.abort();
+        active = null;
+        prepared = false;
+        state("idle");
+      }
+      updateLabel();
+    }
+
     function fallback() {
       if (failed || disposed) return;
       failed = true;
+      consumeInitialAutoplay();
       attempt++;
       playback++;
       pending?.abort();
@@ -164,13 +212,25 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
         } else {
           animationFrame = requestAnimationFrame(() => { animationFrame = requestAnimationFrame(reveal); });
         }
-      } catch {
-        if (currentAttempt === attempt && currentPlayback === playback && allowed()) fallback();
+      } catch (error) {
+        if (currentAttempt !== attempt || currentPlayback !== playback || !allowed()) return;
+        if (error instanceof DOMException && error.name === "NotAllowedError") recoverBlockedPlayback();
+        else fallback();
       }
     }
 
-    async function play() {
-      if (!allowed() || active) return;
+    async function play(automatically = false) {
+      if (!allowed()) return;
+      if (active) {
+        if (autoplayBlocked && phase === "paused" && !automatically) {
+          autoplayBlocked = false;
+          void playActive();
+        }
+        return;
+      }
+      consumeInitialAutoplay();
+      autoplayBlocked = false;
+      control.dataset.autoplay = automatically ? "attempted" : "manual";
       const direction: Direction = endpoint === "first" ? "forward" : "reverse";
       const media = clips[direction];
       const currentAttempt = ++attempt;
@@ -183,7 +243,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       state("loading");
       try {
         if (!media.getAttribute("src")) {
-          // Neither clip downloads initially; reverse loads only on first reverse activation.
+          // The reverse clip still loads only on its first requested activation.
           media.preload = "auto";
           media.src = sources[direction];
           media.load();
@@ -229,6 +289,8 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     }
 
     const syncMotion = () => {
+      if (preference.matches) consumeInitialAutoplay();
+      else scheduleInitialAutoplay();
       updateLabel();
       if (!active || !prepared || phase === "finishing") return;
       if (!allowed()) {
@@ -248,7 +310,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     const pointerDown = (event: PointerEvent) => { pointerType = event.pointerType; };
     const activate = (event: MouseEvent) => {
       // Desktop clicks are not a second hover; taps and native keyboard clicks alternate.
-      if (event.detail === 0 || pointerType !== "mouse" || !hover.matches) void play();
+      if (autoplayBlocked || event.detail === 0 || pointerType !== "mouse" || !hover.matches) void play();
     };
     const keyDown = (event: KeyboardEvent) => {
       if (event.repeat && (event.key === "Enter" || event.key === " ")) event.preventDefault();
@@ -270,8 +332,24 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     if (!clips.forward.canPlayType('video/webm; codecs="vp9"') || (still.complete && !still.naturalWidth)) fallback();
     else updateLabel();
 
+    if (!initialAutoplayUsed && !failed && hero) {
+      if (typeof IntersectionObserver === "function") {
+        heroObserver = new IntersectionObserver(entries => {
+          const entry = entries[0];
+          heroVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= .1);
+          scheduleInitialAutoplay();
+        }, { threshold: .1 });
+        heroObserver.observe(hero);
+      } else {
+        window.addEventListener("scroll", updateHeroVisibility, { passive: true });
+        window.addEventListener("resize", updateHeroVisibility);
+        updateHeroVisibility();
+      }
+    }
+
     return () => {
       disposed = true;
+      consumeInitialAutoplay();
       attempt++;
       playback++;
       pending?.abort();

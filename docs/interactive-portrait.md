@@ -4,7 +4,7 @@ This refinement builds on `b2def6457e0de817d2bcd4dd7abcf01e243d375b` on `feat/in
 
 ## Interaction
 
-The first frame is visible immediately, without autoplay. A new desktop mouse-enter plays the forward clip once and permanently holds the last frame. The next mouse-enter plays a separate reverse-encoded clip once and permanently holds the first frame. Further completed interactions alternate directions. Leaving or moving within the portrait does not stop, reset, reverse or restart playback. Re-entering during playback is ignored, not queued.
+The first frame is visible immediately. When the Hero first becomes visible, a one-time 500 ms delay schedules forward autoplay, unless reduced motion is requested. The completed animation permanently holds the last frame. If autoplay is denied, the first frame stays visible and manual activation remains enabled. An early manual activation consumes the pending autoplay. After the forward animation completes, the next mouse-enter plays a separate reverse-encoded clip once and permanently holds the first frame. Further completed interactions alternate directions. Leaving or moving within the portrait does not stop, reset, reverse or restart playback. Re-entering during playback is ignored, not queued.
 
 Mobile taps and keyboard Enter/Space use the same alternation. Extra activations during loading, playback or the final-frame handoff are ignored. Repeated keydown events cannot start accidental extra transitions. The button's English/Persian accessible name describes the next direction.
 
@@ -22,7 +22,7 @@ When the tab becomes hidden, active playback pauses at its current frame. Return
 - Original SHA-256: `f81a95270c8796233661b2e68c82166abfffa4df5cbd6e0876a20348a9970a6f`.
 - Reverse SHA-256: `631b4ed66a16a7eedfd2d207d5e3780ffebd38da6a4a915aa994d064cff5c63e`.
 
-The lossless reverse is larger than the original lossy recording. Neither video has a source attached on initial load. The forward clip loads on its first requested activation; the reverse loads only on the first requested reverse activation. The last still is prepared on the first forward activation. Existing media buffers and decoded stills are reused for later interactions. No JavaScript frame-by-frame reversal or negative playback rate is used; both clips play normally at rate 1.
+The lossless reverse is larger than the original lossy recording. Neither video has a source attached on initial render. The forward clip loads after the one-time visible-Hero delay or an earlier manual activation; the reverse loads only on the first requested reverse activation. Reduced-motion users and an initially offscreen Hero do not start a video download. The last still is prepared on the first forward activation. Existing media buffers and decoded stills are reused for later interactions. No JavaScript frame-by-frame reversal or negative playback rate is used; both clips play normally at rate 1.
 
 Encoding command (FFmpeg with libvpx-vp9):
 
@@ -66,3 +66,7 @@ Tests ran against the rendered production build in Chromium 154 on Linux, includ
 Actual Safari, iOS, Firefox and Edge were not available and are not claimed as tested. Safari transparency still needs checking on a real device; the independent alpha gates and static fallbacks are tested safeguards, not Safari certification.
 
 Smoke code/styles, navigation, scroll reveals, factual copy, projects, CV and contact interactions remain unchanged. No merge, production deployment command or Vercel configuration change is part of this work.
+
+## Discovery autoplay and contact glow
+
+The subsequent autoplay and icon-glow refinement is documented in [hero-autoplay-contact-glow.md](hero-autoplay-contact-glow.md), including permission-denial recovery, one-time visibility handling and rendered hover/focus verification. All media assets and the reverse encoding remain unchanged.
