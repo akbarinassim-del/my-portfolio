@@ -8,6 +8,7 @@ export const site = {
     video: {
       src: "/images/Movie-portfolio.webm",
       reverseSrc: "/images/Movie-portfolio-reverse.webm",
+      introSrc: "/images/Movie-portfolio-intro.webm",
       poster: "/images/movie-portfolio-poster.png",
       lastPoster: "/images/movie-portfolio-last-frame.png",
     },

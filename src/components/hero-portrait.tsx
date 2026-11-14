@@ -4,25 +4,26 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { site } from "@/config/site";
 
-type Direction = "forward" | "reverse";
+type Direction = "forward" | "reverse" | "intro";
 type Endpoint = "first" | "last";
 type Phase = "idle" | "loading" | "playing" | "paused" | "finishing" | "fallback";
 
-/** Alternates two real encodings; pointer exit never changes playback or the held pose. */
+/** Experimental short discovery clip; manual input keeps the original full-length alternation. */
 export function HeroPortrait({ label, playLabel, reverseLabel }: {
   label: string; playLabel: string; reverseLabel: string;
 }) {
   const button = useRef<HTMLButtonElement>(null);
   const forward = useRef<HTMLVideoElement>(null);
   const reverse = useRef<HTMLVideoElement>(null);
+  const intro = useRef<HTMLVideoElement>(null);
   const poster = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (!button.current || !poster.current || !forward.current || !reverse.current) return;
+    if (!button.current || !poster.current || !forward.current || !reverse.current || !intro.current) return;
     const control = button.current;
     const still = poster.current;
-    const clips = { forward: forward.current, reverse: reverse.current };
-    const sources = { forward: site.portrait.video.src, reverse: site.portrait.video.reverseSrc };
+    const clips = { forward: forward.current, reverse: reverse.current, intro: intro.current };
+    const sources = { forward: site.portrait.video.src, reverse: site.portrait.video.reverseSrc, intro: site.portrait.video.introSrc };
     const stills = { first: site.portrait.video.poster, last: site.portrait.video.lastPoster };
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const hover = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -178,7 +179,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       sample.width = 4; sample.height = 1;
       const context = sample.getContext("2d", { willReadFrequently: true });
       if (!context) return false;
-      // Verified background/subject pixels in BOTH clips' first decoded frames.
+      // Verified background/subject pixels in all three clips' first decoded frames.
       [[20, 360], [1260, 360], [640, 5], [640, 360]].forEach(([x, y], index) => {
         context.drawImage(media, x, y, 1, 1, index, 0, 1, 1);
       });
@@ -231,7 +232,8 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       consumeInitialAutoplay();
       autoplayBlocked = false;
       control.dataset.autoplay = automatically ? "attempted" : "manual";
-      const direction: Direction = endpoint === "first" ? "forward" : "reverse";
+      // The experimental intro settles back to frame zero; later inputs use the full clips.
+      const direction: Direction = automatically ? "intro" : endpoint === "first" ? "forward" : "reverse";
       const media = clips[direction];
       const currentAttempt = ++attempt;
       const controller = new AbortController();
@@ -317,6 +319,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     };
     const forwardEnded = () => { void finish("forward"); };
     const reverseEnded = () => { void finish("reverse"); };
+    const introEnded = () => { void finish("intro"); };
 
     control.addEventListener("pointerenter", enter);
     control.addEventListener("pointerdown", pointerDown);
@@ -324,6 +327,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     control.addEventListener("keydown", keyDown);
     clips.forward.addEventListener("ended", forwardEnded);
     clips.reverse.addEventListener("ended", reverseEnded);
+    clips.intro.addEventListener("ended", introEnded);
     Object.values(clips).forEach(media => { media.muted = true; media.addEventListener("error", fallback); });
     still.addEventListener("error", fallback);
     document.addEventListener("visibilitychange", syncMotion);
@@ -361,6 +365,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       control.removeEventListener("keydown", keyDown);
       clips.forward.removeEventListener("ended", forwardEnded);
       clips.reverse.removeEventListener("ended", reverseEnded);
+      clips.intro.removeEventListener("ended", introEnded);
       still.removeEventListener("error", fallback);
       document.removeEventListener("visibilitychange", syncMotion);
       preference.removeEventListener("change", syncMotion);
@@ -371,6 +376,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     <button ref={button} className="portrait-control" type="button" disabled aria-label={label} aria-busy="false" data-state="idle" data-endpoint="first">
       <video ref={forward} className="portrait-video portrait-forward" data-active="false" width={1280} height={720} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
       <video ref={reverse} className="portrait-video portrait-reverse" data-active="false" width={1280} height={720} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
+      <video ref={intro} className="portrait-video portrait-intro" data-active="false" width={1280} height={720} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
       <Image ref={poster} className="portrait-image portrait-poster" src={site.portrait.video.poster} alt="" width={1280} height={720} unoptimized preload draggable={false} aria-hidden="true" />
     </button>
   );
