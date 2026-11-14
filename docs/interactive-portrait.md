@@ -46,7 +46,11 @@ ffmpeg -c:v libvpx-vp9 -i public/images/Movie-portfolio.webm \
 
 Codec support alone does not prove alpha support. Each clip is validated independently before being revealed, sampling three known transparent pixels and an opaque subject pixel from its actual first decoded frame. First frames are revealed only after a video frame has been delivered. An incompatible or opaque decoder cannot expose a black rectangle.
 
-Unsupported playback on first use falls back to the unchanged transparent `prof.png`. If the forward animation already completed, a failed reverse load, alpha check or playback request retains the successfully decoded last-frame still and disables animation. Failures never reset that completed pose. The final held pose stays transparent over the approved smoke.
+Unsupported playback on first use keeps the same transparent `movie-portfolio-poster.png` already shown on first render. It never swaps to the older `prof.png` portrait or its different framing. If the forward animation already completed, a failed reverse load, alpha check or playback request retains the successfully decoded last-frame still and disables animation. Failures never reset that completed pose. The held pose stays transparent over the approved smoke.
+
+Safari on iPhone may decode VP9 WebM without its alpha channel even when codec support is reported. The alpha gate intentionally keeps that opaque video hidden. In this case the matching portrait still remains static: this fix prevents the unwanted photo replacement, but does not add native Safari-compatible transparent video. A compatible alpha encoding (typically HEVC with alpha, for both directions) and real-device verification are still needed to approve animated playback there. The available Linux FFmpeg `libx265` encoder has no alpha pixel format and cannot generate that native HEVC-alpha representation; ordinary HEVC conversion would remove transparency.
+
+The mobile fallback correction was checked in Chromium touch emulation in English and Persian: unsupported codec, opaque forward decode, failed forward download, opaque reverse decode, and failed reverse download all retain their matching transparent endpoint without requesting `prof.png`. Autoplay permission denial still allows a manual retry. An ordinary ten-second autoplay and subsequent reverse tap still work. All 12 targeted cases, lint, TypeScript and production build pass. These failure simulations reproduce the old photo swap and verify its removal; they are not a real iPhone/Safari playback certification.
 
 ## Verification
 
