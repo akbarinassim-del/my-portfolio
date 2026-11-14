@@ -1,50 +1,68 @@
-# Interactive Hero portrait
+# Bidirectional transparent Hero portrait
 
-This focused enhancement is based on approved commit `a87283a5cbd33a5076057183bffe55568741e3c5`. The approved UI changes remain unmerged into `main`; this branch keeps them intact and brings in only the uploaded video from `main` commit `f6a9cd8`.
+This refinement builds on `b2def6457e0de817d2bcd4dd7abcf01e243d375b` on `feat/interactive-video-portrait`. The approved layout from `a87283a` remains intact. No production branch or deployment settings are changed.
 
-## Assets and composition
+## Interaction
 
-- Original `public/images/Movie-portfolio.webm`: 2,834,409 bytes, 1280 × 720, VP9, nominal 24 fps, 240 decoded frames, 10.04-second container duration. The source includes Opus audio; playback is always muted.
-- All 240 frames were decoded with libvpx-vp9 and have genuine alpha transparency. Each has at least 711,089 fully transparent pixels out of 921,600. The background is not baked-in black, white or checkerboard pixels.
-- `movie-portfolio-poster.png` is the unaltered first decoded RGBA frame. No image generation, retouching, stretching or lossy recompression was used.
-- The approved 3:4 portrait footprint and its desktop/mobile positions remain unchanged. The source's 16:9 transparent canvas is centered at its natural aspect ratio inside it: `(16/9)/(3/4) = 64/27` times the container width. Only surrounding padding extends outside the viewport; the subject, including shoulders, arms and hands, stays within it across the source animation.
-- Original video SHA-256: `f81a95270c8796233661b2e68c82166abfffa4df5cbd6e0876a20348a9970a6f`.
-- First-frame PNG SHA-256: `09aa6143b47b3b9a12e1926bac5b36fa7694ff7d4c285284ba56ea86709a1407`.
+The first frame is visible immediately, without autoplay. A new desktop mouse-enter plays the forward clip once and permanently holds the last frame. The next mouse-enter plays a separate reverse-encoded clip once and permanently holds the first frame. Further completed interactions alternate directions. Leaving or moving within the portrait does not stop, reset, reverse or restart playback. Re-entering during playback is ignored, not queued.
 
-## Interaction and loading
+Mobile taps and keyboard Enter/Space use the same alternation. Extra activations during loading, playback or the final-frame handoff are ignored. Repeated keydown events cannot start accidental extra transitions. The button's English/Persian accessible name describes the next direction.
 
-The server-rendered first-frame PNG is visible immediately, including with JavaScript disabled. There is no autoplay, looping, native control panel or play overlay. The WebM has no source attached until the first interaction, so initial loading needs only the PNG.
+Only a successfully completed animation changes the held endpoint. The native final video frame stays visible until the matching first/last PNG has decoded, then the exact still holds that pose. Media surfaces switch without opacity transitions, avoiding fades or double-blended transparent edges. The original fixed portrait footprint, contain sizing and transparent side padding are preserved.
 
-Fine-pointer mouse entry, touch activation and native button activation with Enter/Space play once. Pointer movement within the portrait and extra taps during playback do not restart it. Mouse exit, focus leaving the control, natural completion or document hiding stop playback and return to the first frame. A 160 ms crossfade covers normal returns; seeking occurs beneath the poster. Loading attempts are cancelled logically on exit so late responses cannot start playback unexpectedly.
+When the tab becomes hidden, active playback pauses at its current frame. Returning resumes that same transition and time, without changing direction or resetting the pose. Held endpoints remain held. Reduced motion initially shows the static first-frame PNG with no video download; enabling it during playback freezes the current frame, and disabling it resumes the same transition when visible.
 
-Reduced motion keeps the first-frame PNG static and disables the animation control. A live preference change stops a running animation. Per-frame work stays in the browser's media decoder; React does not rerender for playback progress.
+## Assets and reverse encoding
 
-## Transparency and failure handling
+- Original: `public/images/Movie-portfolio.webm`, untouched, 2,834,409 bytes, VP9 with alpha, 1280 × 720, nominal 24 fps, 240 frames. Its 10.04-second container includes an Opus track; playback is always muted.
+- Reverse: `public/images/Movie-portfolio-reverse.webm`, lossless VP9 with alpha, 1280 × 720, 24 fps, 240 frames, 10 seconds, 14,532,584 bytes. The generated reverse clip omits audio.
+- First still: unchanged `movie-portfolio-poster.png`, the original first decoded RGBA frame.
+- Last still: `movie-portfolio-last-frame.png`, the original last decoded RGBA frame.
+- All 240 decoded reverse RGBA frame hashes exactly match the original frame hashes in reverse order. This checks color, alpha, resolution, framing and visual quality, rather than only container metadata. Both PNGs also exactly match their original endpoint frame hashes.
+- Original SHA-256: `f81a95270c8796233661b2e68c82166abfffa4df5cbd6e0876a20348a9970a6f`.
+- Reverse SHA-256: `631b4ed66a16a7eedfd2d207d5e3780ffebd38da6a4a915aa994d064cff5c63e`.
 
-`canPlayType()` is only an initial codec check. Before any video surface becomes visible, four pixels are sampled from the actual decoded first frame: three known transparent background positions and one opaque subject position. A browser that decodes VP9 but discards alpha therefore cannot expose an opaque video rectangle. The video is revealed only after playback has delivered a frame.
+The lossless reverse is larger than the original lossy recording. Neither video has a source attached on initial load. The forward clip loads on its first requested activation; the reverse loads only on the first requested reverse activation. The last still is prepared on the first forward activation. Existing media buffers and decoded stills are reused for later interactions. No JavaScript frame-by-frame reversal or negative playback rate is used; both clips play normally at rate 1.
 
-No codec support, failed transparency validation, load/decode errors, rejected playback or poster loading failure use the original unchanged `prof.png`, with `object-fit: contain`. This also handles a poster that fails before hydration. A missing first frame or playback frame times out safely to that same static fallback. The video remains visually hidden until validated.
+Encoding command (FFmpeg with libvpx-vp9):
+
+```sh
+ffmpeg -c:v libvpx-vp9 -i public/images/Movie-portfolio.webm \
+  -map 0:v:0 -vf reverse -an -c:v libvpx-vp9 -pix_fmt yuva420p \
+  -lossless 1 -crf 0 -b:v 0 -auto-alt-ref 0 -row-mt 1 -threads 4 \
+  -deadline good -cpu-used 0 -color_range pc -colorspace bt709 \
+  -color_trc iec61966-2-1 -color_primaries bt709 -fps_mode passthrough \
+  public/images/Movie-portfolio-reverse.webm
+```
+
+Lossless last-frame extraction:
+
+```sh
+ffmpeg -c:v libvpx-vp9 -i public/images/Movie-portfolio.webm \
+  -vf 'select=eq(n\,239)' -frames:v 1 -update 1 public/images/movie-portfolio-last-frame.png
+```
+
+## Transparency and fallback
+
+Codec support alone does not prove alpha support. Each clip is validated independently before being revealed, sampling three known transparent pixels and an opaque subject pixel from its actual first decoded frame. First frames are revealed only after a video frame has been delivered. An incompatible or opaque decoder cannot expose a black rectangle.
+
+Unsupported playback on first use falls back to the unchanged transparent `prof.png`. If the forward animation already completed, a failed reverse load, alpha check or playback request retains the successfully decoded last-frame still and disables animation. Failures never reset that completed pose. The final held pose stays transparent over the approved smoke.
 
 ## Verification
 
-- Production-rendered browser tested: Chromium `154.0.8037.57` on Linux. Desktop pointer input, mobile touch emulation and both English/Persian layouts were tested.
-- Full content/header and Hero/page geometry matched the approved baseline at 1920, 1440, 768, 430, 390, 375 and 320 px in both languages (14 cases).
-- Initial still/no video request; hover; pointer movement without restart; early exit/reset; natural one-shot completion; re-entry; touch replay; repeated taps; keyboard Enter/Space; focus-leave reset; live reduced-motion updates and unchanged portrait geometry passed.
-- Decoder alpha sampling and an actual rendered compositing test passed: a known color behind the running video remained exactly visible through its transparent margin. Smoke remained visible in the normal screenshots.
-- All five forced failure cases passed: unsupported codec, opaque decoded alpha, invalid video data, rejected `play()` and failed poster load. Each displayed the original transparent PNG, with the video hidden.
-- A delayed first request cancelled by mouse exit remained paused, then played correctly after re-entry.
-- Hiding the document was tested by dispatching `visibilitychange` with a simulated hidden state; it stopped and reset playback.
-- JavaScript-disabled static poster passed.
-- Lint, TypeScript and production build passed.
+Tests ran against the rendered production build in Chromium 154 on Linux, including mobile touch emulation:
 
-Actual Safari, iOS, Firefox and Edge were not available and are **not claimed as tested**. In particular, Safari WebM alpha support must still be checked on a real Safari device. The alpha gate and PNG fallback have been exercised by forced failure tests; those tests do not substitute for Safari certification.
+- Full English/Persian content, header markup and page/Hero geometry match the approved baseline at 1920, 1440, 768, 430, 390, 375 and 320 px (14 cases).
+- Forward → last → reverse → first → forward alternation passes on desktop and touch, in both languages.
+- Both forward and reverse were played through naturally once. Other repetitions seek near real EOF to exercise native completion and handoff.
+- Early pointer exit continues playback; pointer movement, desktop clicks and re-entry during playback do not restart it. Destination stills remain held after exit, without autoplaying the next direction.
+- Keyboard Enter/Space alternate correctly; tabbing away does not interrupt an active clip.
+- Hidden state was simulated through `visibilitychange`: playback pauses at the same time, then resumes the same direction and completes. Live reduced-motion changes freeze and resume without changing the pose. Initial reduced motion makes no video request.
+- Source, poster and decoded frame checks prove exact endpoint continuity and real alpha. Actual browser alpha sampling passes for both clips. Smoke keeps drifting behind held poses.
+- Unsupported codec, opaque reverse decoding, invalid reverse data and rejected reverse playback all show a safe static fallback; reverse failures retain the completed last-frame PNG.
+- Portrait-scoped WCAG A/AA checks pass. Existing language-switch accessible labels remain unchanged; their pre-existing WCAG 2.1 label-content mismatch is outside this focused change.
+- Lint, TypeScript and production build pass.
 
-The new portrait is audited separately for WCAG A/AA checks. The unchanged language switch has a pre-existing WCAG 2.1 label-content-name mismatch (the `EN`/`FA` abbreviations versus their expanded accessible names); its markup was deliberately preserved as requested. No claim of complete page-wide WCAG conformance is made.
+Actual Safari, iOS, Firefox and Edge were not available and are not claimed as tested. Safari transparency still needs checking on a real device; the independent alpha gates and static fallbacks are tested safeguards, not Safari certification.
 
-Smoke code/styles, mobile navigation, contact interaction, scroll-reveal implementation, projects, all prior bilingual copy, factual content, assets and the real CV remain unchanged. No Vercel configuration changes or production deployment commands are part of this work.
-
-To reproduce the lossless first-frame extraction:
-
-```sh
-ffmpeg -c:v libvpx-vp9 -i public/images/Movie-portfolio.webm -frames:v 1 -update 1 public/images/movie-portfolio-poster.png
-```
+Smoke code/styles, navigation, scroll reveals, factual copy, projects, CV and contact interactions remain unchanged. No merge, production deployment command or Vercel configuration change is part of this work.

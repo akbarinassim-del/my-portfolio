@@ -5,7 +5,12 @@ export const site = {
   url: "https://nasim-akbari.vercel.app",
   portrait: {
     src: "/images/prof.png", width: 1086, height: 1448,
-    video: { src: "/images/Movie-portfolio.webm", poster: "/images/movie-portfolio-poster.png" },
+    video: {
+      src: "/images/Movie-portfolio.webm",
+      reverseSrc: "/images/Movie-portfolio-reverse.webm",
+      poster: "/images/movie-portfolio-poster.png",
+      lastPoster: "/images/movie-portfolio-last-frame.png",
+    },
   },
   cv: "/Nasim-Akbari-CV.pdf",
   profile: "https://talents.xgen.design/#nasim-akbari",

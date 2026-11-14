@@ -68,7 +68,7 @@ export function Portfolio({ locale, copy: t }: { locale: "en" | "fa"; copy: Dict
               <h2 className="professional-title" lang="en" dir="ltr">{site.professionalTitle}</h2>
             </div>
             <figure className="portrait">
-              <HeroPortrait label={t.hero.portrait} playLabel={t.hero.animatePortrait} />
+              <HeroPortrait label={t.hero.portrait} playLabel={t.hero.animatePortrait} reverseLabel={t.hero.reversePortrait} />
               <figcaption>{t.hero.caption}</figcaption>
             </figure>
             <div className="hero-story">
