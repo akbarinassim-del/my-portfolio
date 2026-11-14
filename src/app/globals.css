@@ -321,6 +321,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .contact-options { display: grid; gap: 6px; padding-top: 12px; }
 .contact-options>a { display: flex; gap: 15px; align-items: center; border: 1px solid transparent; border-radius: 8px; padding: 13px 10px; min-height: 72px; }
 .contact-options>a>svg { color: #bfd6a3; flex-shrink: 0; }
+/* Icon-only mist: keep row styling, geometry and focus outlines unchanged. */
+.contact-options>a>svg { overflow: visible; filter: drop-shadow(0 0 0 rgb(172 198 148 / 0)) drop-shadow(0 0 0 rgb(112 143 110 / 0)); transition: filter 280ms ease; }
+.contact-options>a:focus-visible>svg { filter: drop-shadow(0 0 5px rgb(172 198 148 / .48)) drop-shadow(0 0 11px rgb(112 143 110 / .24)); }
+@media (hover: hover) and (pointer: fine) {
+  .contact-options>a:hover>svg { filter: drop-shadow(0 0 5px rgb(172 198 148 / .48)) drop-shadow(0 0 11px rgb(112 143 110 / .24)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-options>a>svg { transition: none; }
+}
 .contact-options>a>span { min-width: 0; display: grid; gap: 5px; }
 .contact-options strong { font-size: var(--text-secondary); font-weight: 600; }
 .contact-options bdi, .contact-options>a>span>span { font-size: var(--text-secondary); line-height: 1.7; color: #bdc8b0; overflow-wrap: anywhere; }
