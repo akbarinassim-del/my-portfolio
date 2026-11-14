@@ -33,7 +33,6 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     let phase: Phase = "idle";
     let disposed = false;
     let failed = false;
-    let completed = 0;
     let prepared = false;
     let pointerType = "";
     let attempt = 0;
@@ -120,13 +119,12 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       cancelFrameWait();
       active = null;
       Object.values(clips).forEach(media => media.pause());
-      // A failed reverse attempt must keep a successfully held destination pose.
-      const keepEndpoint = completed > 0 && still!.complete && still!.naturalWidth > 0
+      // Keep the same video portrait even when a mobile decoder cannot preserve alpha.
+      // This also preserves the held final pose if a later reverse attempt fails.
+      const keepEndpoint = still!.complete && still!.naturalWidth > 0
         && still!.getAttribute("src") === stills[endpoint];
-      if (!keepEndpoint) {
-        control!.dataset.fallback = "original";
-        still!.src = site.portrait.src;
-      }
+      if (!keepEndpoint) still!.src = stills[endpoint];
+      control.dataset.fallback = "endpoint";
       state("fallback");
       updateLabel();
       Object.values(clips).forEach(media => { media.removeAttribute("src"); media.load(); });
@@ -280,7 +278,6 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
         await still.decode();
         if (currentAttempt !== attempt || disposed) return;
         endpoint = target;
-        completed++;
         control.dataset.endpoint = target;
         active = null;
         state("idle");
