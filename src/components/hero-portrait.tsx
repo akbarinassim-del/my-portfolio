@@ -5,10 +5,10 @@ import { useEffect, useRef } from "react";
 import { site } from "@/config/site";
 
 type Direction = "forward" | "reverse" | "intro";
-type Endpoint = "first" | "last";
+type Endpoint = "first" | "intro" | "last";
 type Phase = "idle" | "loading" | "playing" | "paused" | "finishing" | "fallback";
 
-/** Experimental short discovery clip; manual input keeps the original full-length alternation. */
+/** Hold the introductory pose, continue seamlessly, then alternate the original full clips. */
 export function HeroPortrait({ label, playLabel, reverseLabel }: {
   label: string; playLabel: string; reverseLabel: string;
 }) {
@@ -24,7 +24,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     const still = poster.current;
     const clips = { forward: forward.current, reverse: reverse.current, intro: intro.current };
     const sources = { forward: site.portrait.video.src, reverse: site.portrait.video.reverseSrc, intro: site.portrait.video.introSrc };
-    const stills = { first: site.portrait.video.poster, last: site.portrait.video.lastPoster };
+    const stills = { first: site.portrait.video.poster, intro: site.portrait.video.introPoster, last: site.portrait.video.lastPoster };
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const hover = window.matchMedia("(hover: hover) and (pointer: fine)");
     const verified = new Set<HTMLVideoElement>();
@@ -52,7 +52,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     let heroObserver: IntersectionObserver | undefined;
 
     const allowed = () => !disposed && !failed && !preference.matches && !document.hidden;
-    const destination = (direction: Direction): Endpoint => direction === "forward" ? "last" : "first";
+    const destination = (direction: Direction): Endpoint => direction === "intro" ? "intro" : direction === "forward" ? "last" : "first";
     const state = (value: Phase) => {
       phase = value;
       control.dataset.state = value;
@@ -60,7 +60,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     };
     const updateLabel = () => {
       control.disabled = failed || preference.matches;
-      control.setAttribute("aria-label", control.disabled ? label : endpoint === "first" ? playLabel : reverseLabel);
+      control.setAttribute("aria-label", control.disabled ? label : endpoint === "last" ? reverseLabel : playLabel);
     };
     const cancelFrameWait = () => {
       window.clearTimeout(frameTimer);
@@ -232,8 +232,9 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       consumeInitialAutoplay();
       autoplayBlocked = false;
       control.dataset.autoplay = automatically ? "attempted" : "manual";
-      // The experimental intro settles back to frame zero; later inputs use the full clips.
-      const direction: Direction = automatically ? "intro" : endpoint === "first" ? "forward" : "reverse";
+      // After discovery, continue from the held pose rather than resetting to frame zero.
+      const direction: Direction = automatically ? "intro" : endpoint === "last" ? "reverse" : "forward";
+      const startTime = direction === "forward" && endpoint === "intro" ? site.portrait.video.introResumeTime : 0;
       const media = clips[direction];
       const currentAttempt = ++attempt;
       const controller = new AbortController();
@@ -251,8 +252,8 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
           media.load();
         }
         await Promise.all([ready(media, controller.signal), preparePoster(stills[destination(direction)])]);
-        if (media.currentTime > .001 || media.seeking || media.ended) {
-          media.currentTime = 0;
+        if (Math.abs(media.currentTime - startTime) > .001 || media.seeking || media.ended) {
+          media.currentTime = startTime;
           await ready(media, controller.signal);
         }
         if (currentAttempt !== attempt || disposed) return;

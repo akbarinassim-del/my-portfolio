@@ -9,6 +9,8 @@ export const site = {
       src: "/images/Movie-portfolio.webm",
       reverseSrc: "/images/Movie-portfolio-reverse.webm",
       introSrc: "/images/Movie-portfolio-intro.webm",
+      introPoster: "/images/movie-portfolio-intro-last-frame.png",
+      introResumeTime: 2, // The intro ends on original frame 48 at 24 fps.
       poster: "/images/movie-portfolio-poster.png",
       lastPoster: "/images/movie-portfolio-last-frame.png",
     },
