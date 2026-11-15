@@ -1,5 +1,9 @@
 # Bidirectional transparent Hero portrait
 
+Current browser playback uses shared H.264 color/mask compositing; see
+[portrait-browser-compatibility.md](portrait-browser-compatibility.md). The native
+WebM encodings and their earlier validation below are retained as source assets.
+
 This refinement builds on `b2def6457e0de817d2bcd4dd7abcf01e243d375b` on `feat/interactive-video-portrait`. The approved layout from `a87283a` remains intact. No production branch or deployment settings are changed.
 
 ## Interaction

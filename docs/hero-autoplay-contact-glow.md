@@ -1,5 +1,8 @@
 # One-time Hero discovery and contact icon glow
 
+The discovery and contact interactions below are preserved by the newer shared
+[browser-compatible portrait renderer](portrait-browser-compatibility.md).
+
 Baseline: completed feature branch `feat/interactive-video-portrait` at `b702a1d3e618c272de28dd134e22fed732b5b348`. This change modifies the portrait interaction and contact-icon CSS. It reuses the existing forward/reverse WebMs, frame-matched first/last PNGs and transparent fallback without changing any asset.
 
 ## Hero behavior

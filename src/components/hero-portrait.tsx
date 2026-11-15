@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { site } from "@/config/site";
+import { createPortraitRenderer } from "@/lib/portrait-video";
 
 type Direction = "forward" | "reverse";
 type Endpoint = "first" | "last";
@@ -16,11 +17,14 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
   const forward = useRef<HTMLVideoElement>(null);
   const reverse = useRef<HTMLVideoElement>(null);
   const poster = useRef<HTMLImageElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!button.current || !poster.current || !forward.current || !reverse.current) return;
+    if (!button.current || !poster.current || !forward.current || !reverse.current || !canvas.current) return;
     const control = button.current;
     const still = poster.current;
+    const surface = canvas.current;
+    let renderer: ReturnType<typeof createPortraitRenderer> | undefined;
     const clips = { forward: forward.current, reverse: reverse.current };
     const sources = { forward: site.portrait.video.src, reverse: site.portrait.video.reverseSrc };
     const stills = { first: site.portrait.video.poster, last: site.portrait.video.lastPoster };
@@ -170,20 +174,6 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       return loading;
     }
 
-    function hasTransparentFrame(media: HTMLVideoElement) {
-      if (media.videoWidth !== 1280 || media.videoHeight !== 720) return false;
-      const sample = document.createElement("canvas");
-      sample.width = 4; sample.height = 1;
-      const context = sample.getContext("2d", { willReadFrequently: true });
-      if (!context) return false;
-      // Verified background/subject pixels in BOTH clips' first decoded frames.
-      [[20, 360], [1260, 360], [640, 5], [640, 360]].forEach(([x, y], index) => {
-        context.drawImage(media, x, y, 1, 1, index, 0, 1, 1);
-      });
-      const rgba = context.getImageData(0, 0, 4, 1).data;
-      return rgba[3] < 16 && rgba[7] < 16 && rgba[11] < 16 && rgba[15] > 240;
-    }
-
     async function playActive() {
       if (!active || !allowed() || phase === "finishing") return;
       const direction = active;
@@ -197,19 +187,29 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
         await media.play();
         if (currentAttempt !== attempt || currentPlayback !== playback || disposed || active !== direction) return;
         if (!allowed()) { media.pause(); state("paused"); return; }
-        const reveal = () => {
+        let lastTime = -1;
+        const draw = () => {
           if (currentAttempt !== attempt || currentPlayback !== playback || disposed || active !== direction || phase === "finishing") return;
-          cancelFrameWait();
-          if (allowed()) state("playing");
-          else { media.pause(); state("paused"); }
+          if (!allowed()) { media.pause(); state("paused"); return; }
+          try {
+            if (media.currentTime !== lastTime) { renderer!.draw(media); lastTime = media.currentTime; }
+            // Safari's video texture must be checked after an actual decoded play frame.
+            if (!verified.has(media)) {
+              if (!renderer!.hasTransparency()) { fallback(); return; }
+              verified.add(media);
+            }
+            window.clearTimeout(frameTimer);
+            if (phase !== "playing") state("playing");
+            if (typeof media.requestVideoFrameCallback === "function") {
+              frameMedia = media; videoFrame = media.requestVideoFrameCallback(draw);
+            } else animationFrame = requestAnimationFrame(draw);
+          } catch { fallback(); }
         };
         frameTimer = window.setTimeout(fallback, 5000);
         if (typeof media.requestVideoFrameCallback === "function") {
           frameMedia = media;
-          videoFrame = media.requestVideoFrameCallback(reveal);
-        } else {
-          animationFrame = requestAnimationFrame(() => { animationFrame = requestAnimationFrame(reveal); });
-        }
+          videoFrame = media.requestVideoFrameCallback(draw);
+        } else animationFrame = requestAnimationFrame(draw);
       } catch (error) {
         if (currentAttempt !== attempt || currentPlayback !== playback || !allowed()) return;
         if (error instanceof DOMException && error.name === "NotAllowedError") recoverBlockedPlayback();
@@ -252,10 +252,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
           await ready(media, controller.signal);
         }
         if (currentAttempt !== attempt || disposed) return;
-        if (!verified.has(media)) {
-          if (!hasTransparentFrame(media)) { fallback(); return; }
-          verified.add(media);
-        }
+        renderer ??= createPortraitRenderer(surface);
         prepared = true;
         if (allowed()) await playActive();
         else state("paused");
@@ -271,6 +268,7 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       const target = destination(direction);
       cancelFrameWait();
       media.pause();
+      try { renderer!.draw(media); } catch { fallback(); return; }
       state("finishing");
       try {
         // The actual final video frame remains visible until its matching still is decoded.
@@ -326,7 +324,8 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
     document.addEventListener("visibilitychange", syncMotion);
     preference.addEventListener("change", syncMotion);
 
-    if (!clips.forward.canPlayType('video/webm; codecs="vp9"') || (still.complete && !still.naturalWidth)) fallback();
+    surface.addEventListener("webglcontextlost", fallback);
+    if (!clips.forward.canPlayType('video/mp4; codecs="avc1.640028"') || (still.complete && !still.naturalWidth)) fallback();
     else updateLabel();
 
     if (!initialAutoplayUsed && !failed && hero) {
@@ -361,13 +360,16 @@ export function HeroPortrait({ label, playLabel, reverseLabel }: {
       still.removeEventListener("error", fallback);
       document.removeEventListener("visibilitychange", syncMotion);
       preference.removeEventListener("change", syncMotion);
+      surface.removeEventListener("webglcontextlost", fallback);
+      renderer?.dispose();
     };
   }, [label, playLabel, reverseLabel]);
 
   return (
-    <button ref={button} className="portrait-control" type="button" disabled aria-label={label} aria-busy="false" data-state="idle" data-endpoint="first">
+    <button ref={button} className="portrait-control" type="button" disabled aria-label={label} aria-busy="false" data-state="idle" data-endpoint="first" data-renderer="packed-h264">
       <video ref={forward} className="portrait-video portrait-forward" data-active="false" width={1280} height={720} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
       <video ref={reverse} className="portrait-video portrait-reverse" data-active="false" width={1280} height={720} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
+      <canvas ref={canvas} className="portrait-canvas" width={1280} height={720} aria-hidden="true" />
       <Image ref={poster} className="portrait-image portrait-poster" src={site.portrait.video.poster} alt="" width={1280} height={720} unoptimized preload draggable={false} aria-hidden="true" />
     </button>
   );

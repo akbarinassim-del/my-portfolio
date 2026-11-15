@@ -6,8 +6,8 @@ export const site = {
   portrait: {
     src: "/images/prof.png", width: 1086, height: 1448,
     video: {
-      src: "/images/Movie-portfolio.webm",
-      reverseSrc: "/images/Movie-portfolio-reverse.webm",
+      src: "/images/movie-portrait-packed-forward.mp4",
+      reverseSrc: "/images/movie-portrait-packed-reverse.mp4",
       poster: "/images/movie-portfolio-poster.png",
       lastPoster: "/images/movie-portfolio-last-frame.png",
     },
